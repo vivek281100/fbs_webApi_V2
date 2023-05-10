@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "9BSsjDlqe8JFU5rFcM+1BzE/1eXcZvWcYAd19/eWtWc=",
+  "Source": "fbs_webApi_v2",
+  "BasePath": "_content/fbs_webApi_v2",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
