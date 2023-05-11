@@ -54,6 +54,6 @@ namespace fbs_webApi_v2.DataModels
         public decimal BasePrice { get; set; }
 
 
-       
+        public IEnumerable<Passenger>  passengers { get; set; }
     }
 }
