@@ -19,7 +19,7 @@ namespace fbs_webApi_v2.IRepositories
 
         Task<bool> UpdateUserAsync(User user);
 
-        Task DeleteUserAsync(int userId);
+        Task<bool> DeleteUserAsync(int userId);
 
     }
 }

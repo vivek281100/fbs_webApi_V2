@@ -20,6 +20,10 @@ builder.Services.Add(new ServiceDescriptor(
     typeof(IUserRepository), typeof(UserRepository),ServiceLifetime.Transient
     ));
 
+builder.Services.Add(new ServiceDescriptor(
+    typeof(IAdminRepository), typeof(AdminRepository), ServiceLifetime.Transient
+    ));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

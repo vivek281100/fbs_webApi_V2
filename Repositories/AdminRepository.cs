@@ -29,34 +29,54 @@ namespace fbs_webApi_v2.Repositories
             return false;
         }
 
-        public async Task DeleteAdminAsync(int id)
+        public async Task<bool> DeleteAdminAsync(int id)
         {
-            throw new NotImplementedException();
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Admin_Id == id);
+            if (admin == null)
+            {
+                return false;
+            };
+            _context.Admins.Remove(admin);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    
+
+        public async Task<Admin?> GetAdminByEmailAsync(string email)
+        {
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Email_Id == email);
+            return admin;
         }
 
-        public async Task<Admin> GetAdminByEmailAsync(string email)
+        public  async Task<Admin?> GetAdminByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Admin_Id == id);
+            return admin;
         }
 
-        public  async Task<Admin> GetAdminByIdAsync(int id)
+        public  async Task<Admin?> GetAdminByUsernameAsync(string adminname)
         {
-            throw new NotImplementedException();
-        }
-
-        public  async Task<Admin> GetAdminByUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Admin_Name == adminname);
+            return admin;
         }
 
         public async Task<List<Admin>> GetAllAdminsAsync()
         {
-            return await _context.Admins.ToListAsync();
+            var admins = await _context.Admins.ToListAsync();
+            return admins;
         }
 
         public async Task<bool> UpdateAdminAsync(Admin admin)
         {
-            throw new NotImplementedException();
+            var userupdate = await _context.Admins.FirstOrDefaultAsync(a => a.Admin_Id == admin.Admin_Id);
+            if (userupdate != null)
+            {
+                userupdate = admin;
+               await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

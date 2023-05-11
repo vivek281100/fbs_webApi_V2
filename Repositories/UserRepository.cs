@@ -28,24 +28,35 @@ namespace fbs_webApi_v2.Repositories
             return false;
         }
 
-        public Task DeleteUserAsync(int userId)
+        public async Task<bool> DeleteUserAsync(int userId)
         {
-            throw new NotImplementedException();
+            var user = await _context.users.FirstOrDefaultAsync(u => u.User_Id ==  userId);
+            if(user == null)
+            {
+                return false;
+            };
+             _context.users.Remove(user);
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<User> GetUserByPhonenumberAsync(string phonenumber)
+        public async Task<User> GetUserByPhonenumberAsync(string phonenumber)
         {
-            throw new NotImplementedException();
+            var user = await _context.users.FirstOrDefaultAsync(u => u.PhoneNumber == phonenumber);
+            return user;
         }
 
-        public Task<User> GetUserByUser_EmailAsync(string email)
+        public async Task<User> GetUserByUser_EmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = await _context.users.FirstOrDefaultAsync(u => u.Email == email);
+            return user;
         }
 
-        public Task<User> GetUserByUser_IdAsync(int userId)
+        public async Task<User> GetUserByUser_IdAsync(int userId)
         {
-            throw new NotImplementedException();
+            var user = await _context.users.FirstOrDefaultAsync(u => u.User_Id == userId);
+            return user;
         }
 
         public async Task<User?> GetUserByUser_NameAsync(string name)
@@ -59,9 +70,16 @@ namespace fbs_webApi_v2.Repositories
             return await _context.users.ToListAsync();
         }
 
-        public Task<bool> UpdateUserAsync(User user)
+        public async Task<bool> UpdateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            var userupdate = await _context.users.FirstOrDefaultAsync(u => u.User_Id == user.User_Id);
+            if (userupdate != null) 
+            {
+                userupdate = user;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

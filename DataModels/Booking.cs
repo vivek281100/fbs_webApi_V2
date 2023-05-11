@@ -9,7 +9,7 @@ namespace fbs_webApi_v2.DataModels
         [Key]
         public int Booking_Id { get; set; }
 
-        public int BookingId { get; set; }
+        //public int BookingId { get; set; }
         public int FlightId { get; set; }
         public int PassengerId { get; set; }
         public int PaymentId { get; set; }
