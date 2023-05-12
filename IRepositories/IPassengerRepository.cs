@@ -5,17 +5,17 @@ namespace fbs_webApi_v2.IRepositories
 {
     public interface IPassengerRepository
     {
-        Task<List<Passenger>> GetAllPassengersAsync();
+        Task<IAsyncEnumerable<Passenger>> GetAllPassengersAsync();
 
         Task<Passenger> GetPassengersByIdAsync(int id);
 
         Task<List<Passenger>> GetPassengersByGenderAsunc(string gender);
 
-        Task<Passenger> AddPassengerAsync(Passenger passenger);
+        Task<bool> AddPassengerAsync(Passenger passenger);
 
-        Task<Passenger> UpdatePassengerAsync(Passenger passenger);
+        Task<bool> UpdatePassengerAsync(Passenger passenger);
 
-        Task DeletePassangerAsync(int id);
+        Task<bool> DeletePassangerAsync(int id);
 
     }
 }

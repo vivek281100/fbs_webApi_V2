@@ -9,29 +9,76 @@ namespace fbs_webApi_v2.Repositories
 {
     public class FlightRepository : IFlightRepository
     {
-        public Task<Flight> AddFlight(Flight flight)
+        private readonly fbscontext _context;
+
+        public FlightRepository(fbscontext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteFlightByIdAsync(int id)
+        public async Task<bool> AddFlight(Flight flight)
         {
-            throw new NotImplementedException();
+            var checkuser = _context.Flights.FirstOrDefaultAsync(a => a.Flight_Id == flight.Flight_Id);
+            if (checkuser == null)
+            {
+                await _context.Flights.AddAsync(flight);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
-        public Task<List<Flight>> GetAllFlightsAsync()
+        public async Task<bool> DeleteFlightByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var userdelete = await _context.Flights.FindAsync(id);
+            if (userdelete != null)
+            {
+                _context.Flights.Remove(userdelete);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<Flight> GetFlightByIdAsync(int id)
+        public async Task<List<Flight>> GetAllFlightsAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Flights.ToListAsync();
         }
 
-        public Task<Flight> UpdateFlight(Flight flight)
+        public async Task<Flight> GetFlightByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var flight = await _context.Flights.FindAsync(id);
+            if(flight == null)
+            {
+                return null;
+            }
+
+            return flight;
+        }
+
+        public async Task<bool> UpdateFlight(Flight flight)
+        {
+            var checkflight = await _context.Flights.FindAsync(flight.Flight_Id);
+            if(checkflight == null) 
+            {
+                checkflight.Flight_Name = flight.Flight_Name;
+                checkflight.Flight_code = flight.Flight_code;
+                checkflight.DepartureAirportName = flight.DepartureAirportName;
+                checkflight.DepartureAirportCode = flight.DepartureAirportCode;
+                checkflight.ArriavalAirportName = flight.ArriavalAirportName;
+                checkflight.ArraiavalAirportCode = flight.ArraiavalAirportCode;
+                checkflight.DepartureDateTime = flight.DepartureDateTime;
+                checkflight.ArrivalDateTime = flight.ArrivalDateTime;
+                checkflight.DipartureCityCode = flight.DipartureCityCode;
+                checkflight.ArrivalCityCode = flight.ArrivalCityCode;
+                checkflight.BasePrice = flight.BasePrice;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
     }
 }

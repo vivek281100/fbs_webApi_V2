@@ -18,7 +18,7 @@ namespace fbs_webApi_v2.Repositories
 
         public async Task<bool> AddAdminAsync(Admin admin)
         {
-            var checkadmin = _context.Admins.FirstOrDefaultAsync(a => a.Admin_Id == admin.Admin_Id);
+            var checkadmin = await _context.Admins.FirstOrDefaultAsync(a => a.Admin_Id == admin.Admin_Id);
             if(checkadmin == null)
             {
                 await _context.Admins.AddAsync(admin);
@@ -69,10 +69,12 @@ namespace fbs_webApi_v2.Repositories
 
         public async Task<bool> UpdateAdminAsync(Admin admin)
         {
-            var userupdate = await _context.Admins.FirstOrDefaultAsync(a => a.Admin_Id == admin.Admin_Id);
-            if (userupdate != null)
+            var adminupdate = await _context.Admins.FindAsync(admin.Admin_Id);
+            if (adminupdate != null)
             {
-                userupdate = admin;
+                adminupdate.Admin_Name = admin.Admin_Name;
+                adminupdate.Email_Id = admin.Email_Id;
+               
                await _context.SaveChangesAsync();
                 return true;
             }

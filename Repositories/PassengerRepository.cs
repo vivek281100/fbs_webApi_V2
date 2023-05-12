@@ -9,34 +9,80 @@ namespace fbs_webApi_v2.Repositories
 {
     public class PassengerRepository : IPassengerRepository
     {
-        public Task<Passenger> AddPassengerAsync(Passenger passenger)
+
+        private readonly fbscontext _context;
+
+        public PassengerRepository(fbscontext context) 
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeletePassangerAsync(int id)
+        public async Task<bool> AddPassengerAsync(Passenger passenger)
         {
-            throw new NotImplementedException();
+            var passengerAdd = await _context.passengers.FirstOrDefaultAsync(p => p.Passenger_Id == passenger.Passenger_Id);
+            if (passengerAdd == null) 
+            {
+                await _context.passengers.AddAsync(passenger);
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<List<Passenger>> GetAllPassengersAsync()
+
+        public async Task<bool> DeletePassangerAsync(int id)
         {
-            throw new NotImplementedException();
+            var passenger = await _context.passengers.FindAsync(id);
+            if(passenger != null) 
+            {
+                _context.passengers.Remove(passenger);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<List<Passenger>> GetPassengersByGenderAsunc(string gender)
+        public async Task<IAsyncEnumerable<Passenger>> GetAllPassengersAsync()
         {
-            throw new NotImplementedException();
+            var passengerlist =  _context.passengers.AsAsyncEnumerable<Passenger>();
+            return passengerlist;
         }
 
-        public Task<Passenger> GetPassengersByIdAsync(int id)
+        public async Task<List<Passenger>> GetPassengersByGenderAsunc(string gender)
         {
-            throw new NotImplementedException();
+            var passengerlistbygender = await _context.passengers.Where(p => p.Gender == gender).ToListAsync();
+            return passengerlistbygender;
         }
 
-        public Task<Passenger> UpdatePassengerAsync(Passenger passenger)
+        public async Task<Passenger?> GetPassengersByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var passenger = await _context.passengers.FindAsync(id);
+            return passenger;
+
+
+        }
+
+        public async Task<bool> UpdatePassengerAsync(Passenger passengerupdate)
+        {
+            var passenger = await _context.passengers.FindAsync(passengerupdate.Passenger_Id);
+            if (passenger != null)
+            {
+                passenger.FirstName = passengerupdate.FirstName;
+                passenger.LastName = passengerupdate.LastName;
+                passenger.PhoneNumber = passengerupdate.PhoneNumber;
+                passenger.Age = passengerupdate.Age;
+                passenger.Email = passengerupdate.Email;
+                passenger.Gender = passengerupdate.Gender;
+                passenger.flight_id = passengerupdate.flight_id;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

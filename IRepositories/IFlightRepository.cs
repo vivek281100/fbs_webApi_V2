@@ -10,9 +10,9 @@ namespace fbs_webApi_v2.IRepositories
 
         Task<Flight> GetFlightByIdAsync(int id);
 
-        Task<Flight> AddFlight(Flight flight);
+        Task<bool> AddFlight(Flight flight);
 
-        Task<Flight> UpdateFlight(Flight flight);
-        Task DeleteFlightByIdAsync(int id);
+        Task<bool> UpdateFlight(Flight flight);
+        Task<bool> DeleteFlightByIdAsync(int id);
     }
 }

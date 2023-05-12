@@ -72,10 +72,14 @@ namespace fbs_webApi_v2.Repositories
 
         public async Task<bool> UpdateUserAsync(User user)
         {
-            var userupdate = await _context.users.FirstOrDefaultAsync(u => u.User_Id == user.User_Id);
+            var userupdate = await _context.users.FindAsync(user.User_Id);
             if (userupdate != null) 
             {
-                userupdate = user;
+                userupdate.User_Name = user.User_Name;
+                userupdate.PhoneNumber = user.PhoneNumber;
+                userupdate.Email = user.Email;
+                //userupdate.Password = user.Password;
+
                 await _context.SaveChangesAsync();
                 return true;
             }
