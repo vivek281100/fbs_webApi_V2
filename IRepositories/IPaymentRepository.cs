@@ -5,16 +5,16 @@ namespace fbs_webApi_v2.IRepositories
 {
     public interface IPaymentRepository
     {
-        Task<List<Payment>> GetPaymentsAsync(int id);
+        Task<List<Payment>> GetPaymentsAsync();
 
         Task<Payment> GetPaymentByIdAsync(int id);
 
         Task<List<Payment>> GetPaymentsByPayment_ModeAsync(string mode);
 
-        Task<Payment> AddPaymentAsync(Payment payment);
+        Task<bool> AddPaymentAsync(Payment payment);
 
-        Task<Payment> UpdatePaymentAsync(Payment payment);
+        Task<bool> UpdatePaymentStatusAsync(int id,bool status);
 
-        Task DeletePaymentAsync(int id);
+        Task<bool> DeletePaymentAsync(int id);
     }
 }

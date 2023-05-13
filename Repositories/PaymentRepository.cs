@@ -9,34 +9,66 @@ namespace fbs_webApi_v2.Repositories
 {
     public class PaymentRepository : IPaymentRepository
     {
-        public Task<Payment> AddPaymentAsync(Payment payment)
+        private readonly fbscontext _context;
+        public PaymentRepository(fbscontext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<bool> AddPaymentAsync(Payment payment)
+        {
+            var checkpayment = await _context.payments.FindAsync(payment.Payment_Id);
+            if (checkpayment == null)
+            {
+                await _context.payments.AddAsync(payment);
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            return false;
         }
 
-        public Task DeletePaymentAsync(int id)
+        public async Task<bool> DeletePaymentAsync(int id)
         {
-            throw new NotImplementedException();
+            var checkpayment = await _context.payments.FindAsync(id);
+            if (checkpayment == null)
+            {
+                return false;
+            }
+            return true;
         }
 
-        public Task<Payment> GetPaymentByIdAsync(int id)
+        public async Task<Payment> GetPaymentByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var payment = await _context.payments.FindAsync(id);
+            return payment;
         }
 
-        public Task<List<Payment>> GetPaymentsAsync(int id)
+        public async Task<List<Payment>> GetPaymentsAsync()
         {
-            throw new NotImplementedException();
+            return await _context.payments.ToListAsync();
         }
 
-        public Task<List<Payment>> GetPaymentsByPayment_ModeAsync(string mode)
+        public async Task<List<Payment>> GetPaymentsByPayment_ModeAsync(string mode)
         {
-            throw new NotImplementedException();
+            var payment = await _context.payments.Where(p => p.Payment_Mode == mode).ToListAsync();
+            return payment;
         }
 
-        public Task<Payment> UpdatePaymentAsync(Payment payment)
+        public async Task<bool> UpdatePaymentStatusAsync(int id, bool status)
         {
-            throw new NotImplementedException();
+            var payment = await _context.payments.FindAsync(id);
+            if (payment != null)
+            {
+                //payment.Payment_Mode = updatepayment.Payment_Mode;
+                //payment.Total_Price = updatepayment.Total_Price;
+                payment.PaymentStatus = status;
+
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            return false;
+
         }
     }
 }
