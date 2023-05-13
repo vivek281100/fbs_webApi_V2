@@ -77,7 +77,7 @@ namespace fbs_webApi_v2.Repositories
                 passenger.Age = passengerupdate.Age;
                 passenger.Email = passengerupdate.Email;
                 passenger.Gender = passengerupdate.Gender;
-                passenger.flight_id = passengerupdate.flight_id;
+                //passenger.flight_id = passengerupdate.flight_id;
 
                 await _context.SaveChangesAsync();
                 return true;

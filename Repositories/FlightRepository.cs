@@ -68,10 +68,12 @@ namespace fbs_webApi_v2.Repositories
                 checkflight.DepartureAirportCode = flight.DepartureAirportCode;
                 checkflight.ArriavalAirportName = flight.ArriavalAirportName;
                 checkflight.ArraiavalAirportCode = flight.ArraiavalAirportCode;
-                checkflight.DepartureDateTime = flight.DepartureDateTime;
-                checkflight.ArrivalDateTime = flight.ArrivalDateTime;
-                checkflight.DipartureCityCode = flight.DipartureCityCode;
-                checkflight.ArrivalCityCode = flight.ArrivalCityCode;
+                checkflight.DepartureDate = flight.DepartureDate;
+                checkflight.ArrivalDate = flight.ArrivalDate;
+                checkflight.DepartureTime = flight.DepartureTime;
+                checkflight.ArrivalTime = flight.ArrivalTime;
+                checkflight.DepartureCity = flight.DepartureCity;
+                checkflight.ArrivalCity = flight.ArrivalCity;
                 checkflight.BasePrice = flight.BasePrice;
 
                 await _context.SaveChangesAsync();

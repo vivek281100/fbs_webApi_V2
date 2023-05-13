@@ -23,9 +23,9 @@ namespace fbs_webApi_v2.Data
 
         public DbSet<Payment> payments { get; set; }
 
-        public DbSet<SeatAllocated> seatAllocateds { get; set; }
+        //public DbSet<SeatAllocated> seatAllocateds { get; set; }
 
-        public DbSet<SeatsAvailable> seatsAvailables { get; set; }
+        //public DbSet<SeatsAvailable> seatsAvailables { get; set; }
 
         public DbSet<User> users { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,10 +10,12 @@ namespace fbs_webApi_v2.DataModels
     public class Flight
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Flight_Id { get; set; }
 
         [Required]
         [StringLength(50)]
+
         public string Flight_Name { get; set; }
 
         [Required]
@@ -38,22 +41,35 @@ namespace fbs_webApi_v2.DataModels
 
 
         [Required]
-        public DateTime DepartureDateTime { get; set; }
+        [DataType(DataType.Date)]
+        public string DepartureDate { get; set; }
 
         [Required]
-        public DateTime ArrivalDateTime { get; set; }
+        [DataType(DataType.Date)]
+        public string ArrivalDate { get; set; }
 
         [Required]
-        public string DipartureCityCode { get; set; }
+        public string DepartureCity { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string ArrivalCityCode { get; set; }
+        public string ArrivalCity { get; set; }
+
+        [Required]
+        [DataType(DataType.Time)]
+        public string DepartureTime { get; set; }
+
+        [Required]
+        [DataType(DataType.Time)]
+        public string ArrivalTime { get; set; }
 
         [Required]
         public decimal BasePrice { get; set; }
 
+        [Required]
+        public int TotalNoofseats { get; set; }
 
-        public IEnumerable<Passenger>  passengers { get; set; }
+
+        //public IEnumerable<Passenger>  passengers { get; set; }
     }
 }
