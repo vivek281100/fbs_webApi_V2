@@ -160,7 +160,12 @@ namespace fbs_webApi_v2.Migrations
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Passenger_Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("passengers");
                 });
@@ -194,21 +199,24 @@ namespace fbs_webApi_v2.Migrations
 
             modelBuilder.Entity("fbs_webApi_v2.DataModels.User", b =>
                 {
-                    b.Property<int>("User_Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("User_Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -219,9 +227,23 @@ namespace fbs_webApi_v2.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("User_Id");
+                    b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("fbs_webApi_v2.DataModels.Passenger", b =>
+                {
+                    b.HasOne("fbs_webApi_v2.DataModels.User", "User")
+                        .WithMany("passengers")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("fbs_webApi_v2.DataModels.User", b =>
+                {
+                    b.Navigation("passengers");
                 });
 #pragma warning restore 612, 618
         }

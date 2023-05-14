@@ -36,11 +36,7 @@ namespace fbs_webApi_v2.DataModels
         [StringLength(13)]
         public string PhoneNumber { get; set; }
 
-
-       // public int flight_id { get; set; }
-
-       // [ForeignKey("flight_id")]
-       //public Flight flight { get; set; }
+        public User? User { get; set; }
     }
 
 

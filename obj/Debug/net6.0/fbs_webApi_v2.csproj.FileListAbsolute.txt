@@ -85,3 +85,10 @@ D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\obj\Debug\net6.0\refint\fb
 D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\obj\Debug\net6.0\fbs_webApi_v2.pdb
 D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\obj\Debug\net6.0\fbs_webApi_v2.genruntimeconfig.cache
 D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\obj\Debug\net6.0\ref\fbs_webApi_v2.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\AutoMapper.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\Scrutor.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll
+D:\visual_studio_codes\asp.net_projects\fbs_webApi_v2\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
