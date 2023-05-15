@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace fbs_webApi_v2.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase

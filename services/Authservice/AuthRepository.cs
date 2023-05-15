@@ -13,12 +13,13 @@ namespace fbs_webApi_v2.services.Authservice
         private readonly fbscontext _context;
         private readonly IConfiguration _configuration;
 
-        public AuthRepository(fbscontext context,IConfiguration configuration) 
+        public AuthRepository(fbscontext context, IConfiguration configuration)
         {
             this._context = context;
             this._configuration = configuration;
         }
 
+        //login
         public async Task<serviceResponce<string>> Login(string username, string password)
         {
             var responce = new serviceResponce<string>();
@@ -28,14 +29,14 @@ namespace fbs_webApi_v2.services.Authservice
                 responce.Success = false;
                 responce.Message = "user not found.";
             }
-             else if(!VerifyPasswordHash(password,user.PasswordHash,user.PasswordSalt))
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 responce.Success = false;
                 responce.Message = "wrong Password";
             }
             else
             {
-                
+
                 responce.Data = CreateToken(user);
                 responce.Message = "User Login success";
             }
@@ -47,8 +48,8 @@ namespace fbs_webApi_v2.services.Authservice
         {
 
             var responce = new serviceResponce<int>();
-            
-            if(await UserExists(user.User_Name))
+
+            if (await UserExists(user.User_Name))
             {
                 responce.Success = false;
                 responce.Message = "User Exists";
@@ -60,19 +61,19 @@ namespace fbs_webApi_v2.services.Authservice
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            
+
             _context.users.Add(user);
             await _context.SaveChangesAsync();
 
             responce.Data = user.Id;
             responce.Message = "User created";
             return responce;
-            
+
         }
 
         public async Task<bool> UserExists(string username)
         {
-            if(await _context.users.AnyAsync(u => u.User_Name.ToLower() == username.ToLower()))
+            if (await _context.users.AnyAsync(u => u.User_Name.ToLower() == username.ToLower()))
             {
                 return true;
             }
@@ -80,7 +81,7 @@ namespace fbs_webApi_v2.services.Authservice
         }
 
 
-        private void CreatePasswordHash(string password,out byte[] PasswordHash,out byte[] PasswordSalt)
+        private void CreatePasswordHash(string password, out byte[] PasswordHash, out byte[] PasswordSalt)
         {
             using (var hmca = new System.Security.Cryptography.HMACSHA512())
             {
@@ -102,7 +103,7 @@ namespace fbs_webApi_v2.services.Authservice
 
         private string CreateToken(User user)
         {
-           List<Claim> claims = new List<Claim>()
+            List<Claim> claims = new List<Claim>()
            {
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                new Claim(ClaimTypes.Name,user.User_Name),

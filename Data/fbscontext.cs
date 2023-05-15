@@ -15,7 +15,7 @@ namespace fbs_webApi_v2.Data
         public DbSet<Admin> Admins { get; set; }
 
         //booking functionality pending
-        //public DbSet<Booking> bookings { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
         public DbSet<Flight> Flights { get; set; }
 

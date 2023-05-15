@@ -8,11 +8,11 @@ namespace fbs_webApi_v2.DataModels
     public class Payment
     {
         [Key]
-        public int Payment_Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime Payment_DateTime { get; set; }
+        public DateTime Payment_DateTime { get; set; } = DateTime.Now;
 
         [Required]
         [StringLength(100)]
@@ -25,6 +25,11 @@ namespace fbs_webApi_v2.DataModels
         public bool PaymentStatus { get; set; }
 
 
+        //one to one with booking table
+        //public int bookingid { get; set; }
+
+        //[ForeignKey(nameof(bookingid))]
+        //public Booking? booking {get; set; }
         
     }
 }

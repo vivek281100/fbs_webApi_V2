@@ -22,21 +22,26 @@ namespace fbs_webApi_v2.services.Repositories
             _mapper = mapper;
         }
 
-        public async Task<serviceResponce<List<GetUserDto>>> AddUserAsync(AddUserDto newUser)
-        {
-            //var user = _context
+        #region AddUserAsync
+        //Add user to db
+        //admin access
+        //public async Task<serviceResponce<List<GetUserDto>>> AddUserAsync(AddUserDto newUser)
+        //{
+        //    //var user = _context
 
-            var responce = new serviceResponce<List<GetUserDto>>();
+        //    var responce = new serviceResponce<List<GetUserDto>>();
 
-            _context.users.Add(_mapper.Map<User>(newUser));
-            await _context.SaveChangesAsync();
+        //    _context.users.Add(_mapper.Map<User>(newUser));
+        //    await _context.SaveChangesAsync();
 
-            responce.Data = await _context.users.Select(a => _mapper.Map<GetUserDto>(a)).ToListAsync();
+        //    responce.Data = await _context.users.Select(a => _mapper.Map<GetUserDto>(a)).ToListAsync();
 
-            return responce;
+        //    return responce;
 
-        }
+        //}
+        #endregion
 
+        //Delete User
         public async Task<serviceResponce<List<GetUserDto>>> DeleteUserAsync(int id)
         {
             var user = await _context.users.FirstOrDefaultAsync(u => u.Id == id);
@@ -58,58 +63,53 @@ namespace fbs_webApi_v2.services.Repositories
         }
 
 
+        //Gets user by email id
         public async Task<serviceResponce<GetUserDto>> GetUserByEmailAsync(string email)
         {
             var user = await _context.users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
                 var userobj = _mapper.Map<GetUserDto>(user);
-                return new serviceResponce<GetUserDto> { Data = userobj,Message="User Found" };
+                return new serviceResponce<GetUserDto> { Data = userobj, Message = "User Found" };
             }
             return new serviceResponce<GetUserDto> { Success = false, Message = "user not found" };
         }
 
-        //public async Task<serviceResponce<GetAdminDto>> GetAdminByIdAsync(int id)
+
+        #region( Previous methods)
+        //public async Task<serviceResponce<GetUserDto>> GetUserByUserNameAsync(string username)
         //{
-        //    var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Admin_Id == id);
-        //    if (admin != null)
+        //    var user = await _context.users.FirstOrDefaultAsync(u => u.User_Name == username);
+        //    if (user == null)
         //    {
-        //        var adminobj = _mapper.Map<GetAdminDto>(admin);
-        //        return new serviceResponce<GetAdminDto> { Data = adminobj };
+        //        var userobj = _mapper.Map<GetUserDto>(user);
+        //        return new serviceResponce<GetUserDto> { Data = userobj, Message = "User found" };
         //    }
-        //    return new serviceResponce<GetAdminDto> { Success = false, Message = "Admin not found" };
+        //    return new serviceResponce<GetUserDto> { Success = false, Message = "User not found" };
         //}
 
-        public async Task<serviceResponce<GetUserDto>> GetUserByUserNameAsync(string username)
-        {
-            var user = await _context.users.FirstOrDefaultAsync(u => u.User_Name == username);
-            if (user == null)
-            {
-                var userobj = _mapper.Map<GetUserDto>(user);
-                return new serviceResponce<GetUserDto> { Data = userobj ,Message="User found"};
-            }
-            return new serviceResponce<GetUserDto> { Success = false, Message = "User not found" };
-        }
+        //public async Task<serviceResponce<List<GetUserDto>>> GetAllUsersAsync()
+        //{
+        //    var responce = new serviceResponce<List<GetUserDto>>();
 
-        public async Task<serviceResponce<List<GetUserDto>>> GetAllUsersAsync()
-        {
-            var responce = new serviceResponce<List<GetUserDto>>();
+        //    var userslist = await _context.users.ToListAsync();
+        //    if (userslist.Count != 0)
+        //    {
+        //        responce.Data = userslist.Select(a => _mapper.Map<GetUserDto>(a)).ToList();
+        //        responce.Message = "Users retrived";
+        //        return responce;
+        //    }
 
-            var userslist = await _context.users.ToListAsync();
-            if (userslist.Count != 0)
-            {
-                responce.Data = userslist.Select(a => _mapper.Map<GetUserDto>(a)).ToList();
-                responce.Message = "Users retrived";
-                return responce;
-            }
+        //    responce.Success = false;
+        //    responce.Message = "No Entries";
 
-            responce.Success = false;
-            responce.Message = "No Entries";
+        //    return responce;
+        //}
 
-            return responce;
-        }
+        #endregion
 
 
+        //Update User
         public async Task<serviceResponce<GetUserDto>> UpdateUserAsync(updateUserDto updateuser)
         {
             User userupdate = await _context.users.FindAsync(updateuser.User_Id);
@@ -132,6 +132,6 @@ namespace fbs_webApi_v2.services.Repositories
 
         }
 
-       
+
     }
 }

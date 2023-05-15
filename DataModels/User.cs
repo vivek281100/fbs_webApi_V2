@@ -14,7 +14,6 @@ namespace fbs_webApi_v2.DataModels
         [StringLength(50)]
         public string User_Name { get; set; }
 
-        
 
         public byte[] PasswordHash { get; set; }
 
@@ -30,8 +29,12 @@ namespace fbs_webApi_v2.DataModels
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
+        
+        //public int bookingid { get; set; }
 
-        public List<Passenger>? passengers { get; set; }
+        //[ForeignKey("bookingid")]
+        //public List<Booking>? Bookings { get; set; }
+        //public List<Passenger>? passengers { get; set; }
 
    
 

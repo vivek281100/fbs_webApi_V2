@@ -9,7 +9,7 @@ namespace fbs_webApi_v2.DataModels
     public class Admin
     {
         [Key]
-        public int Admin_Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(100)]

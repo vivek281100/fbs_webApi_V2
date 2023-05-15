@@ -19,16 +19,16 @@ namespace fbs_webApi_v2.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private  readonly IAuthRepository _authRepository;
-        
+        private readonly IAuthRepository _authRepository;
 
-        public UserController(IUserRepository userRepository,IAuthRepository authRepository)
+
+        public UserController(IUserRepository userRepository, IAuthRepository authRepository)
         {
             _userRepository = userRepository;
             _authRepository = authRepository;
-            //_authController = authController;
+            
         }
-        //private AuthController _authcontroller = new AuthController(auth: _authRepository);
+        #region (Previous Methods)
         //[HttpGet]
         //[Route("users")]
         //public async Task<ActionResult<serviceResponce<List<GetUserDto>>>> Getusers()
@@ -75,7 +75,7 @@ namespace fbs_webApi_v2.Controllers
         //[Route("usersByUserName/{username}")]
         //public async Task<IActionResult> getUserByUsername(string username)
         //{
-        //    var user = await _userRepository.GetUserByUser_NameAsync(username);
+        //    var user = await _userRepository.GetUserByUserNameAsync(username);
         //    if (user != null)
         //    {
         //        return Ok(user);
@@ -97,14 +97,16 @@ namespace fbs_webApi_v2.Controllers
 
         //    return BadRequest("no user found 😢");
         //}
+        #endregion
 
         [HttpPost]
         [Route("UserLogin")]
         [AllowAnonymous]
+        //from AuthRepository.
         public async Task<IActionResult> Login(UserLoginDto details)
         {
-            var responce = await _authRepository.Login(details.username,details.Password);
-            if(!responce.Success)
+            var responce = await _authRepository.Login(details.username, details.Password);
+            if (!responce.Success)
             {
                 return BadRequest(responce);
             }
@@ -115,12 +117,13 @@ namespace fbs_webApi_v2.Controllers
         [HttpPost]
         [Route("registeruser")]
         [AllowAnonymous]
+        // From AuthRepository.
         public async Task<ActionResult<serviceResponce<GetUserDto>>> Register(UserRegisterDto registeruser)
         {
-           
+
             var responce = await _authRepository.Register(
-                new User() { User_Name = registeruser.UserName,Email = registeruser.UserName,PhoneNumber = registeruser.phonenumber },registeruser.Password);
-            if(responce.Success)
+                new User() { User_Name = registeruser.UserName, Email = registeruser.UserName, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
+            if (responce.Success)
             {
                 return Ok(responce);
             }

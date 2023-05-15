@@ -5,6 +5,7 @@ using System.Linq;
 using AutoMapper;
 using fbs_webApi_v2.DataModels;
 using fbs_webApi_v2.DTOs.AdminDtos;
+using fbs_webApi_v2.DTOs.passengerDtos;
 using fbs_webApi_v2.DTOs.UserDtos;
 
 namespace fbs_webApi_v2
@@ -22,6 +23,11 @@ namespace fbs_webApi_v2
             CreateMap<User,GetUserDto>();
             CreateMap<AddUserDto, User>();
             CreateMap<updateUserDto, User>();
+
+            //Passenger
+            CreateMap<Passenger, GetPassengerDto>();
+            CreateMap<AddPassengerDto, Passenger>();
+            CreateMap<UpdatePassengerDto, Passenger>();
         }
     }
 }

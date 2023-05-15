@@ -4,6 +4,9 @@ using fbs_webApi_v2.Data;
 using fbs_webApi_v2.DataModels;
 using Microsoft.EntityFrameworkCore;
 using fbs_webApi_v2.services.IRepositories;
+using fbs_webApi_v2.DTOs.passengerDtos;
+using System.Security.Claims;
+using AutoMapper;
 
 namespace fbs_webApi_v2.services.Repositories
 {
@@ -11,78 +14,194 @@ namespace fbs_webApi_v2.services.Repositories
     {
 
         private readonly fbscontext _context;
+        private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PassengerRepository(fbscontext context)
+        public PassengerRepository(fbscontext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<bool> AddPassengerAsync(Passenger passenger)
+        //getting user id
+        #region Get user id
+        private int GetUserId()
         {
-            var passengerAdd = await _context.passengers.FirstOrDefaultAsync(p => p.Passenger_Id == passenger.Passenger_Id);
-            if (passengerAdd == null)
+            var id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
+        #endregion
+        
+        
+        //adduser
+        #region Add Passenger
+        public async Task<serviceResponce<List<GetPassengerDto>>> AddPassengerAsync(AddPassengerDto addpassenger)
+        {
+            //var passengerAdd = await _context.passengers.FirstOrDefaultAsync(p => p.User.Id == userId);
+            var responce = new serviceResponce<List<GetPassengerDto>>();
+
+            Passenger passenger = _mapper.Map<Passenger>(addpassenger);
+
+            //passenger.User = await _context.users.FirstOrDefaultAsync(u => u.Id == GetUserId());
+
+
+            try
             {
-                await _context.passengers.AddAsync(passenger);
+                _context.passengers.Add(passenger);
 
                 await _context.SaveChangesAsync();
 
-                return true;
+                responce.Data = await _context.passengers
+                .Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
+
+                //.Where(p => p.User.Id == GetUserId())
             }
-
-            return false;
-        }
-
-
-        public async Task<bool> DeletePassangerAsync(int id)
-        {
-            var passenger = await _context.passengers.FindAsync(id);
-            if (passenger != null)
+            catch (Exception ex)
             {
-                _context.passengers.Remove(passenger);
-                await _context.SaveChangesAsync();
-                return true;
+                responce.Message = ex.Message;
+                responce.Success = false;
             }
 
-            return false;
+            return responce;
         }
+        #endregion
 
-        public async Task<IAsyncEnumerable<Passenger>> GetAllPassengersAsync()
+        //pending....
+        #region Delete Passenger
+        public async Task<serviceResponce<List<GetPassengerDto>>> DeletePassangerAsync(int id)
         {
-            var passengerlist = _context.passengers.AsAsyncEnumerable<Passenger>();
-            return passengerlist;
-        }
-
-        public async Task<List<Passenger>> GetPassengersByGenderAsunc(string gender)
-        {
-            var passengerlistbygender = await _context.passengers.Where(p => p.Gender == gender).ToListAsync();
-            return passengerlistbygender;
-        }
-
-        public async Task<Passenger?> GetPassengersByIdAsync(int id)
-        {
-            var passenger = await _context.passengers.FindAsync(id);
-            return passenger;
-
-
-        }
-
-        public async Task<bool> UpdatePassengerAsync(Passenger passengerupdate)
-        {
-            var passenger = await _context.passengers.FindAsync(passengerupdate.Passenger_Id);
-            if (passenger != null)
+            var responce = new serviceResponce<List<GetPassengerDto>>();
+            try
             {
-                passenger.FirstName = passengerupdate.FirstName;
-                passenger.LastName = passengerupdate.LastName;
-                passenger.PhoneNumber = passengerupdate.PhoneNumber;
-                passenger.Age = passengerupdate.Age;
-                passenger.Email = passengerupdate.Email;
-                passenger.Gender = passengerupdate.Gender;
-                //passenger.flight_id = passengerupdate.flight_id;
 
-                await _context.SaveChangesAsync();
-                return true;
+                Passenger passenger = await _context.passengers.FirstOrDefaultAsync(p => p.Id == id);
+                if (passenger != null)
+                {
+                    _context.passengers.Remove(passenger);
+                    await _context.SaveChangesAsync();
+
+                    responce.Data = _context.passengers.Select(p => _mapper.Map<GetPassengerDto>(p)).ToList();
+                    responce.Message = "User Deleted";
+
+                }
+
+
             }
-            return false;
+            catch (Exception ex)
+            {
+                responce.Success = false;
+                responce.Message = ex.Message;
+            }
+            return responce;
         }
+        #endregion
+
+
+
+        //gets all passengers
+        #region Gets Passengers
+        public async Task<serviceResponce<List<GetPassengerDto>>> GetAllPassengersAsync()
+        {
+            var responce = new serviceResponce<List<GetPassengerDto>>();
+            var passengerlist = await _context.passengers.ToListAsync();
+
+            if (passengerlist.Count != 0)
+            {
+                responce.Message = "passengers reterived";
+                responce.Data = _mapper.Map<List<GetPassengerDto>>(passengerlist);
+                return responce;
+            }
+
+            responce.Success = false;
+            responce.Message = "no passengers";
+            return responce;
+        }
+        #endregion
+
+        //gets all passengers by gender
+        #region passenger by gender
+        public async Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByGenderAsunc(string gender)
+        {
+            var responce = new serviceResponce<List<GetPassengerDto>>();
+            var passengerlist = await _context.passengers.Where(p => p.Gender == gender).ToListAsync();
+
+            //var passengerlistbygender = passengerlist.Where(p => p.Gender == gender);
+            if (passengerlist != null)
+            {
+                responce.Data = _mapper.Map<List<GetPassengerDto>>(passengerlist);
+                responce.Message = "passengers retrived";
+                return responce;
+            }
+            responce.Success = false;
+            responce.Message = "no entries";
+            return responce;
+        }
+        #endregion
+
+        //gets passengers by userid
+        //pending...
+        #region passenders by user id
+        public async Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByuserIdAsync()
+        {
+            var responce = new serviceResponce<List<GetPassengerDto>>();
+            var passengerlist = await _context.passengers.Where(p => p.Id == GetUserId()).ToListAsync();
+            if (passengerlist == null)
+            {
+                responce.Success = false;
+                responce.Message = "user not found";
+                return responce;
+            }
+            responce.Data = _mapper.Map<List<GetPassengerDto>>(passengerlist);
+            responce.Message = "user found";
+            return responce;
+
+        }
+        #endregion
+
+        //updates user
+        #region Update Passenger
+        public async Task<serviceResponce<GetPassengerDto>> UpdatePassengerAsync(UpdatePassengerDto passengerupdate)
+        {
+            var responce = new serviceResponce<GetPassengerDto>();
+
+            try
+            {
+                var updatepassenger = await _context.passengers
+                        .FirstOrDefaultAsync(p => p.Id == passengerupdate.Passenger_Id);
+
+                if (updatepassenger != null)
+                {
+
+                    _mapper.Map(passengerupdate, updatepassenger);
+
+                    //passenger.FirstName = passengerupdate.FirstName;
+                    //passenger.LastName = passengerupdate.LastName;
+                    //passenger.PhoneNumber = passengerupdate.PhoneNumber;
+                    //passenger.Age = passengerupdate.Age;
+                    //passenger.Email = passengerupdate.Email;
+                    //passenger.Gender = passengerupdate.Gender;
+                    //passenger.flight_id = passengerupdate.flight_id;
+
+                    await _context.SaveChangesAsync();
+                    responce.Data = _mapper.Map<GetPassengerDto>(updatepassenger);
+                    responce.Message = "update successful";
+
+                }
+                else
+                {
+                    responce.Success = false;
+                    responce.Message = "passenger not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                responce.Success = false;
+                responce.Message = ex.Message;
+            }
+
+            return responce;
+        }
+        #endregion
     }
 }

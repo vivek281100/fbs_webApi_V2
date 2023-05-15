@@ -10,8 +10,7 @@ namespace fbs_webApi_v2.DataModels
     public class Flight
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Flight_Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -68,6 +67,14 @@ namespace fbs_webApi_v2.DataModels
 
         [Required]
         public int TotalNoofseats { get; set; }
+
+        [Required]
+        public bool Isrunning { get; set; } = true;
+
+
+        //relation to other models
+        //public virtual ICollection<Booking> Bookings { get; set; }
+        //public List<Passenger>? flightpassengers { get; set; } 
 
 
     }

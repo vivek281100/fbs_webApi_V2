@@ -7,7 +7,7 @@ namespace fbs_webApi_v2.DataModels
     public class Passenger
     {
         [Key]
-        public int Passenger_Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -36,7 +36,14 @@ namespace fbs_webApi_v2.DataModels
         [StringLength(13)]
         public string PhoneNumber { get; set; }
 
-        public User? User { get; set; }
+        public List<Booking>?  booking { get; set; }
+
+
+        //flight relation
+        //[ForeignKey("Flight")]
+        //public int FlightId { get; set; }
+
+        //public virtual Flight Flight { get; set; }
     }
 
 

@@ -32,6 +32,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 //    ));
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
+builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 
 //adding authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -61,6 +63,9 @@ builder.Services.AddSwaggerGen(c => {
 c.OperationFilter<SecurityRequirementsOperationFilter>();
 
 });
+
+//httpcontext accessor to acces user data
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

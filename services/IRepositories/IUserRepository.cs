@@ -13,7 +13,7 @@ namespace fbs_webApi_v2.services.IRepositories
         //Task<serviceResponce<GetUserDto>> Register(AddUserDto addUserDto);
         //Task<serviceResponce<GetUserDto>> GetUserByUser_IdAsync(int userId);
 
-        Task<serviceResponce<GetUserDto>> GetUserByUserNameAsync(string name);
+        //Task<serviceResponce<GetUserDto>> GetUserByUserNameAsync(string name);
 
         Task<serviceResponce<GetUserDto>> GetUserByEmailAsync(string email);
 

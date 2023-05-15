@@ -15,7 +15,7 @@ namespace fbs_webApi_v2.services.Repositories
         private readonly IMapper _mapper;
 
         //controller
-        public AdminRepository(fbscontext context,IMapper mapper)
+        public AdminRepository(fbscontext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -32,7 +32,7 @@ namespace fbs_webApi_v2.services.Repositories
             _context.Admins.Add(_mapper.Map<Admin>(newadmin));
             await _context.SaveChangesAsync();
 
-            responce.Data =await  _context.Admins.Select(a => _mapper.Map<GetAdminDto>(a)).ToListAsync();
+            responce.Data = await _context.Admins.Select(a => _mapper.Map<GetAdminDto>(a)).ToListAsync();
 
             return responce;
             //}
@@ -42,7 +42,7 @@ namespace fbs_webApi_v2.services.Repositories
 
         public async Task<serviceResponce<List<GetAdminDto>>> DeleteAdminAsync(int id)
         {
-            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Admin_Id == id);
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Id == id);
 
             serviceResponce<List<GetAdminDto>> responce = new serviceResponce<List<GetAdminDto>>();
 
@@ -74,7 +74,7 @@ namespace fbs_webApi_v2.services.Repositories
 
         public async Task<serviceResponce<GetAdminDto>> GetAdminByIdAsync(int id)
         {
-            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Admin_Id == id);
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Id == id);
             if (admin != null)
             {
                 var adminobj = _mapper.Map<GetAdminDto>(admin);
@@ -124,7 +124,7 @@ namespace fbs_webApi_v2.services.Repositories
             responce.Success = false;
             responce.Message = "update not done, user not found";
             return responce;
- 
+
         }
     }
 }
