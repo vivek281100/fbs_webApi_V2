@@ -19,7 +19,7 @@ namespace fbs_webApi_v2.services.IRepositories
 
         //Task<serviceResponce<GetUserDto>> GetUserByPhonenumberAsync(string phonenumber);
 
-        //Task<serviceResponce<GetUserDto>> CreateUserAsync(AddUserDto adduser);
+        //Task<serviceResponce<List<GetUserDto>>> AddUserAsync(AddUserDto adduser);
         //Task<serviceResponce<GetUserDto>> Login(string username, string password);
 
         Task<serviceResponce<GetUserDto>> UpdateUserAsync(updateUserDto updateuser);

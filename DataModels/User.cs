@@ -34,7 +34,6 @@ namespace fbs_webApi_v2.DataModels
 
         //[ForeignKey("bookingid")]
         //public List<Booking>? Bookings { get; set; }
-        //public List<Passenger>? passengers { get; set; }
 
    
 

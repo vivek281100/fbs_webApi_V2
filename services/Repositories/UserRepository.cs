@@ -22,12 +22,14 @@ namespace fbs_webApi_v2.services.Repositories
             _mapper = mapper;
         }
 
+
+        //add user
         #region AddUserAsync
         //Add user to db
         //admin access
         //public async Task<serviceResponce<List<GetUserDto>>> AddUserAsync(AddUserDto newUser)
         //{
-        //    //var user = _context
+        //    var user = _context
 
         //    var responce = new serviceResponce<List<GetUserDto>>();
 

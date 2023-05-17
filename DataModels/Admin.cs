@@ -13,16 +13,16 @@ namespace fbs_webApi_v2.DataModels
 
         [Required]
         [StringLength(100)]
-        public string Admin_Name { get; set; }
+        public string Admin_Name { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
         [DataType(DataType.Password)]
-        public string Password { get; set;}
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string Email_Id { get; set; }
+        public string Email_Id { get; set; } = string.Empty;
 
     }
 }

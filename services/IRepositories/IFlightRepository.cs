@@ -12,6 +12,7 @@ namespace fbs_webApi_v2.services.IRepositories
 
         Task<serviceResponce<GetFlightDto>> GetFlightByIdAsync(int id);
 
+        Task<serviceResponce<List<GetFlightDto>>> SearchFlights(SearchFlightDto searchflight);
         Task<serviceResponce<List<GetFlightDto>>> AddFlightAsync(AddFlightDto addflight);
 
         Task<serviceResponce<GetFlightDto>> UpdateFlightAsync(UpdateFlightDto updateflight);

@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace fbs_webApi_v2.Controllers
 {
-    [Authorize]
+  //  [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PassengerController : ControllerBase
@@ -28,7 +28,7 @@ namespace fbs_webApi_v2.Controllers
         {
             //int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var responce = _passengerRepository.GetAllPassengersAsync();
-            if (responce.IsCompleted)
+            if (responce.Result.Success)
             {
                 return Ok(responce.Result);
             }

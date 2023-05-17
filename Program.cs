@@ -20,6 +20,17 @@ builder.Services.AddDbContext<fbscontext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PrimaryConnection"));
 });
 
+//builder.Services.AddC
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //dependency injection
@@ -75,10 +86,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+app.UseAuthentication();//
 
 app.UseAuthorization();
 

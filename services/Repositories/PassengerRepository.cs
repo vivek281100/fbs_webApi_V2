@@ -28,7 +28,7 @@ namespace fbs_webApi_v2.services.Repositories
         #region Get user id
         private int GetUserId()
         {
-            var id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var id =  _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
         }
         #endregion

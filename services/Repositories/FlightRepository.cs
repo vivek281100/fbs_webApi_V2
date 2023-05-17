@@ -22,6 +22,40 @@ namespace fbs_webApi_v2.services.Repositories
         }
 
 
+        //search flight by from and to
+        //accessable by all
+        public async Task<serviceResponce<List<GetFlightDto>>> SearchFlights(SearchFlightDto searchFlight)
+        {
+            var responce = new serviceResponce<List<GetFlightDto>>();
+            try
+            {
+                var flights = await _context.Flights
+                    .Where(f => f.DepartureCity == searchFlight.DepartureCity && f.ArrivalCity == searchFlight.ArrivalCity).ToListAsync();
+
+                if(flights == null || flights.Count == 0)
+                {
+                    responce.Success = false;
+                    responce.Message = "No Flights found";
+
+                    
+                }
+                else
+                {
+                    responce.Message = "Flights Found";
+                    responce.Data = _mapper.Map<List<GetFlightDto>>(flights);
+                }
+            }
+            catch (Exception ex)
+            {
+                responce.Success = false;
+                responce.Message = ex.Message;
+            }
+
+            return responce;
+        }
+
+
+
         //adding flight
         //allowed by admin, no user access.
          public async Task<serviceResponce<List<GetFlightDto>>> AddFlightAsync(AddFlightDto addflight)
@@ -42,6 +76,7 @@ namespace fbs_webApi_v2.services.Repositories
 
                     response.Message = "flight Added";
                     response.Data = await _context.Flights.Select(f => _mapper.Map<GetFlightDto>(f)).ToListAsync();
+                    return response;
                 }
 
                 response.Success = false;
@@ -83,10 +118,12 @@ namespace fbs_webApi_v2.services.Repositories
         public async Task<serviceResponce<List<GetFlightDto>>> GetAllFlightsAsync()
         {
             var responce = new serviceResponce<List<GetFlightDto>>();
-            var flights = _context.Flights.ToListAsync();
+            var flights = await _context.Flights.ToListAsync();
             if (flights != null)
             {
-                responce.Data = _mapper.Map<List<GetFlightDto>>(flights).ToList();
+                responce.Data = _mapper.Map<List<GetFlightDto>>(flights);
+                responce.Message = "flights list";
+                return responce;
             }
             responce.Success = false;
             responce.Message = "Add Flights to see here";
@@ -146,7 +183,8 @@ namespace fbs_webApi_v2.services.Repositories
                 responce.Message = "flight updated";
                 return responce;
             }
-
+            responce.Success = false;
+            responce.Message = "Flight no found";
             return responce;
         }
     }

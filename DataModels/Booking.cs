@@ -41,5 +41,5 @@ namespace fbs_webApi_v2.DataModels
         //public ICollection<Passenger> Passengers { get; set; }
     }
 
-    
+
 }

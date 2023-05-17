@@ -64,7 +64,7 @@ namespace fbs_webApi_v2.services.Repositories
         public async Task<serviceResponce<GetAdminDto>> GetAdminByEmailAsync(string email)
         {
             var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Email_Id == email);
-            if (admin == null)
+            if (admin != null)
             {
                 var adminobj = _mapper.Map<GetAdminDto>(admin);
                 return new serviceResponce<GetAdminDto> { Data = adminobj };
