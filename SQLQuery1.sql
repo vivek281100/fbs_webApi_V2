@@ -1,1 +1,1 @@
-﻿drop database Fbs_v3
+﻿select * from Bookings

@@ -7,7 +7,7 @@ namespace fbs_webApi_v2.services.Authservice
     {
         Task<serviceResponce<int>> Register(User user, string password);
 
-        Task<serviceResponce<string>> Login(string username, string password);
+        Task<serviceResponce<loginresponce>> Login(string username, string password);
 
         Task<bool> UserExists(string username);
     }

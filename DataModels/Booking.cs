@@ -17,28 +17,32 @@ namespace fbs_webApi_v2.DataModels
         [DataType(DataType.DateTime)]
         public DateTime bookingdatetime { get; set; } = DateTime.Now;
 
+
+
+        // foreignKey..
+
         //[ForeignKey("User")]
-        //public int UserId { get; set; }
+        public int UserId { get; set; }
 
         //[ForeignKey("Flight")]
-        //public int FlightId { get; set; }
+        public int FlightId { get; set; }
 
         //[ForeignKey("Payment")]
         //public int? PaymentId { get; set; }
 
 
         ////navgiation properties.
-        //public virtual User User { get; set; }
+        public  User User { get; set; }
 
 
         ////[ForeignKey("FlightId")]
-        //public virtual Flight Flight { get; set; }
+        public  Flight Flight { get; set; }
 
         ////[ForeignKey("PaymentId")]
         //public Payment? Payment { get; set; }
 
 
-        //public ICollection<Passenger> Passengers { get; set; }
+        public IEnumerable<Passenger> Passenger { get; set; }
     }
 
 

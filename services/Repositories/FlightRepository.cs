@@ -30,7 +30,7 @@ namespace fbs_webApi_v2.services.Repositories
             try
             {
                 var flights = await _context.Flights
-                    .Where(f => f.DepartureCity == searchFlight.DepartureCity && f.ArrivalCity == searchFlight.ArrivalCity).ToListAsync();
+                    .Where(f => f.DepartureCity.ToLower() == searchFlight.DepartureCity.ToLower() && f.ArrivalCity.ToLower() == searchFlight.ArrivalCity.ToLower() && f.DepartureDate.Date == searchFlight.DepartureDate.Date).ToListAsync();
 
                 if(flights == null || flights.Count == 0)
                 {

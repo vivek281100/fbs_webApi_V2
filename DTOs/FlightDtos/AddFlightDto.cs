@@ -22,20 +22,20 @@
 
 
 
-        public string DepartureDate { get; set; }
+        public DateTime DepartureDate { get; set; }
 
 
-        public string ArrivalDate { get; set; }
+        public DateTime ArrivalDate { get; set; }
 
         public string DepartureCity { get; set; }
 
         public string ArrivalCity { get; set; }
 
 
-        public string DepartureTime { get; set; }
+        public DateTime DepartureTime { get; set; }
 
 
-        public string ArrivalTime { get; set; }
+        public DateTime ArrivalTime { get; set; }
 
 
         public decimal BasePrice { get; set; }

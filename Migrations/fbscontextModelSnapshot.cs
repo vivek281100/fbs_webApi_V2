@@ -58,7 +58,10 @@ namespace fbs_webApi_v2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PassengerId")
+                    b.Property<int>("FlightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("bookingdatetime")
@@ -69,7 +72,9 @@ namespace fbs_webApi_v2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PassengerId");
+                    b.HasIndex("FlightId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -97,13 +102,11 @@ namespace fbs_webApi_v2.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ArrivalDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ArrivalDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ArrivalTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("BasePrice")
                         .HasColumnType("decimal(18,2)");
@@ -122,13 +125,11 @@ namespace fbs_webApi_v2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DepartureDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DepartureDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("DepartureTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Flight_Name")
                         .IsRequired()
@@ -162,6 +163,9 @@ namespace fbs_webApi_v2.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(120)
@@ -187,7 +191,14 @@ namespace fbs_webApi_v2.Migrations
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("passengers");
                 });
@@ -214,7 +225,12 @@ namespace fbs_webApi_v2.Migrations
                     b.Property<decimal>("Total_Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("bookingid")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("bookingid");
 
                     b.ToTable("payments");
                 });
@@ -232,6 +248,9 @@ namespace fbs_webApi_v2.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -243,6 +262,11 @@ namespace fbs_webApi_v2.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("User_Name")
                         .IsRequired()
@@ -256,14 +280,68 @@ namespace fbs_webApi_v2.Migrations
 
             modelBuilder.Entity("fbs_webApi_v2.DataModels.Booking", b =>
                 {
-                    b.HasOne("fbs_webApi_v2.DataModels.Passenger", null)
-                        .WithMany("booking")
-                        .HasForeignKey("PassengerId");
+                    b.HasOne("fbs_webApi_v2.DataModels.Flight", "Flight")
+                        .WithMany("Bookings")
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fbs_webApi_v2.DataModels.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("fbs_webApi_v2.DataModels.Passenger", b =>
                 {
+                    b.HasOne("fbs_webApi_v2.DataModels.Booking", "booking")
+                        .WithMany("Passenger")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fbs_webApi_v2.DataModels.User", "User")
+                        .WithMany("passengers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
                     b.Navigation("booking");
+                });
+
+            modelBuilder.Entity("fbs_webApi_v2.DataModels.Payment", b =>
+                {
+                    b.HasOne("fbs_webApi_v2.DataModels.Booking", "booking")
+                        .WithMany()
+                        .HasForeignKey("bookingid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("booking");
+                });
+
+            modelBuilder.Entity("fbs_webApi_v2.DataModels.Booking", b =>
+                {
+                    b.Navigation("Passenger");
+                });
+
+            modelBuilder.Entity("fbs_webApi_v2.DataModels.Flight", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("fbs_webApi_v2.DataModels.User", b =>
+                {
+                    b.Navigation("Bookings");
+
+                    b.Navigation("passengers");
                 });
 #pragma warning restore 612, 618
         }

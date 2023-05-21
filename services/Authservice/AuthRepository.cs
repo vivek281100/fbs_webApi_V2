@@ -2,6 +2,7 @@
 using fbs_webApi_v2.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -20,9 +21,9 @@ namespace fbs_webApi_v2.services.Authservice
         }
 
         //login
-        public async Task<serviceResponce<string>> Login(string username, string password)
+        public async Task<serviceResponce<loginresponce>> Login(string username, string password)
         {
-            var responce = new serviceResponce<string>();
+            var responce = new serviceResponce<loginresponce>();
             var user = await _context.users.FirstOrDefaultAsync(u => u.User_Name.ToLower() == username.ToLower());
             if (user == null)
             {
@@ -36,9 +37,19 @@ namespace fbs_webApi_v2.services.Authservice
             }
             else
             {
+                var logintoken = CreateToken(user);
+                var userStatus = user.IsActive;
 
-                responce.Data = CreateToken(user);
-                responce.Message = "User Login success";
+
+                //an object to send token and user status
+                var login = new loginresponce();
+                login.Token = logintoken;
+                login.Status = userStatus;
+
+
+                responce.Data = login ;
+
+                responce.Message = user.Role;
             }
 
             return responce;
@@ -127,5 +138,13 @@ namespace fbs_webApi_v2.services.Authservice
             return handler.WriteToken(token);
 
         }
+    }
+
+
+    //class for login responce
+    public class loginresponce
+    {
+        public string Token { get; set; }
+        public bool Status { get; set; }
     }
 }

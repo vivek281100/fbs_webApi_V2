@@ -29,11 +29,20 @@ namespace fbs_webApi_v2.DataModels
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
+        [Required]
+        [StringLength(10)]
+        public string Role { get; set; } = "User";
+
+        [Required]
+        public bool IsActive { get; set; } = false;
+
         
         //public int bookingid { get; set; }
 
         //[ForeignKey("bookingid")]
-        //public List<Booking>? Bookings { get; set; }
+        public List<Booking>? Bookings { get; set; }
+
+        public IEnumerable<Passenger> passengers { get; set; }
 
    
 

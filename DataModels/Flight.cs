@@ -40,12 +40,11 @@ namespace fbs_webApi_v2.DataModels
 
 
         [Required]
-        [DataType(DataType.Date)]
-        public string DepartureDate { get; set; }
+        public DateTime DepartureDate { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        public string ArrivalDate { get; set; }
+     
+        public DateTime ArrivalDate { get; set; }
 
         [Required]
         public string DepartureCity { get; set; }
@@ -55,12 +54,12 @@ namespace fbs_webApi_v2.DataModels
         public string ArrivalCity { get; set; }
 
         [Required]
-        [DataType(DataType.Time)]
-        public string DepartureTime { get; set; }
+    
+        public DateTime DepartureTime { get; set; }
 
         [Required]
-        [DataType(DataType.Time)]
-        public string ArrivalTime { get; set; }
+       
+        public DateTime ArrivalTime { get; set; }
 
         [Required]
         public decimal BasePrice { get; set; }
@@ -73,7 +72,7 @@ namespace fbs_webApi_v2.DataModels
 
 
         //relation to other models
-        //public virtual ICollection<Booking> Bookings { get; set; }
+        public IEnumerable<Booking> Bookings { get; set; }
         //public List<Passenger>? flightpassengers { get; set; } 
 
 

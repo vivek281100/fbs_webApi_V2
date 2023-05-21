@@ -38,12 +38,18 @@ namespace fbs_webApi_v2.services.Repositories
         #region Add Passenger
         public async Task<serviceResponce<List<GetPassengerDto>>> AddPassengerAsync(AddPassengerDto addpassenger)
         {
-            //var passengerAdd = await _context.passengers.FirstOrDefaultAsync(p => p.User.Id == userId);
+            var passengerAdd = await _context.passengers.FirstOrDefaultAsync(p => p.UserId == GetUserId());
+
             var responce = new serviceResponce<List<GetPassengerDto>>();
 
             Passenger passenger = _mapper.Map<Passenger>(addpassenger);
+            passenger.UserId = GetUserId();
+           
+            passenger.booking = await _context.Bookings.FirstOrDefaultAsync(B => B.Id == addpassenger.BookingId);
 
-            //passenger.User = await _context.users.FirstOrDefaultAsync(u => u.Id == GetUserId());
+            passenger.BookingId = passenger.booking.Id;
+
+            passenger.User = await _context.users.FirstOrDefaultAsync(u => u.Id == GetUserId());
 
 
             try
@@ -53,9 +59,9 @@ namespace fbs_webApi_v2.services.Repositories
                 await _context.SaveChangesAsync();
 
                 responce.Data = await _context.passengers
+                    .Where(p => p.User.Id == GetUserId())
                 .Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
 
-                //.Where(p => p.User.Id == GetUserId())
             }
             catch (Exception ex)
             {
@@ -81,7 +87,7 @@ namespace fbs_webApi_v2.services.Repositories
                     _context.passengers.Remove(passenger);
                     await _context.SaveChangesAsync();
 
-                    responce.Data = _context.passengers.Select(p => _mapper.Map<GetPassengerDto>(p)).ToList();
+                    responce.Data = await _context.passengers.Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
                     responce.Message = "User Deleted";
 
                 }

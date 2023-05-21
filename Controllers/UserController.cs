@@ -8,7 +8,7 @@ using fbs_webApi_v2.services.Authservice;
 using fbs_webApi_v2.DTOs.UserDtos;
 using fbs_webApi_v2.DTOs.AuthDtos;
 using fbs_webApi_v2.DataModels;
-using fbs_webApi_v2.Controllers;
+//using fbs_webApi_v2.Controllers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace fbs_webApi_v2.Controllers

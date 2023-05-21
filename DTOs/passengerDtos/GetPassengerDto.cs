@@ -4,7 +4,7 @@ namespace fbs_webApi_v2.DTOs.passengerDtos
 {
     public class GetPassengerDto
     {
-  
+        public int Id { get; set; }
         public string FirstName { get; set; }
 
      

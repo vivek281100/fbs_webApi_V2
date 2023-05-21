@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace fbs_webApi_v2.Controllers
 {
-  //  [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PassengerController : ControllerBase
@@ -80,18 +80,22 @@ namespace fbs_webApi_v2.Controllers
         }
 
 
-        [HttpDelete]
-        [Route("RemovePassenger/{id}")]
+        [HttpPost]
+        [Route("RemovePassenger")]
         public async Task<ActionResult<serviceResponce<GetPassengerDto>>> deletePassenger(int id)
         {
-            var responce = await _passengerRepository.DeletePassangerAsync(id);
-
-            if (responce.Success)
+            try
             {
-                return Ok(responce);
-            }
+                var responce = await _passengerRepository.DeletePassangerAsync(id);
 
-            return BadRequest(responce);
+                
+                    return Ok(responce);
+                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
 
         }
 

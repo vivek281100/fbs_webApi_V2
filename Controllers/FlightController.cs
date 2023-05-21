@@ -60,14 +60,21 @@ namespace fbs_webApi_v2.Controllers
 
         [HttpPost]
         [Route("getflightsbyfromandto")]
+        [AllowAnonymous]
         public async Task<ActionResult<serviceResponce<List<GetFlightDto>>>> searchflights(SearchFlightDto searchflights)
         {
-            var responce = await _flightRepository.SearchFlights(searchflights);
-            if(responce.Success)
+            var error = string.Empty;
+            try
             {
+                var responce = await _flightRepository.SearchFlights(searchflights);
                 return Ok(responce);
             }
-            return BadRequest(responce);
+            catch (Exception ex)
+            {
+                 error = ex.Message;
+            }
+
+            return BadRequest(error);
         }
 
         [HttpPut]

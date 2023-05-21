@@ -30,6 +30,10 @@ namespace fbs_webApi_v2.DataModels
 
         //[ForeignKey(nameof(bookingid))]
         //public Booking? booking {get; set; }
+
+        public int bookingid { get; set; }
+
+        public Booking booking { get; set; }
         
     }
 }

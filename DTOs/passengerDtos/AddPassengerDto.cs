@@ -15,5 +15,7 @@
 
 
         public string PhoneNumber { get; set; }
+
+        public int BookingId { get; set; }
     }
 }
