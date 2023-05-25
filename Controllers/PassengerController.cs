@@ -27,26 +27,30 @@ namespace fbs_webApi_v2.Controllers
         public async Task<ActionResult<serviceResponce<List<GetPassengerDto>>>> GetAllPassengers()
         {
             //int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var responce = _passengerRepository.GetAllPassengersAsync();
-            if (responce.Result.Success)
+            var responce = await _passengerRepository.GetAllPassengersAsync();
+            if (responce.Success)
             {
-                return Ok(responce.Result);
+                return Ok(responce);
             }
-            return BadRequest(responce.Result);
+            return BadRequest(responce);
         }
 
         [HttpGet]
-        [Route("GetPassengersbyuserid/")]
-        public async Task<ActionResult<serviceResponce<List<GetPassengerDto>>>> getPassengersbyuserid()
+        [Route("GetPassengersbybookingid")]
+        public async Task<ActionResult<serviceResponce<List<GetPassengerDto>>>> getPassengersbybookingid(int id)
         {
             //int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var responce = _passengerRepository.GetPassengersByuserIdAsync();
-            if (responce.Result.Success)
-            {
-                return Ok(responce.Result);
-            }
 
-            return BadRequest(responce.Result);
+            try
+            {
+                var responce =  await _passengerRepository.GetPassengersByBookingIdAsync(id);
+                    return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpPost]
@@ -82,7 +86,7 @@ namespace fbs_webApi_v2.Controllers
 
         [HttpPost]
         [Route("RemovePassenger")]
-        public async Task<ActionResult<serviceResponce<GetPassengerDto>>> deletePassenger(int id)
+        public async Task<ActionResult<serviceResponce<GetPassengerDto>>> deletePassenger([FromBody]int id)
         {
             try
             {

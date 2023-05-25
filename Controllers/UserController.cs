@@ -105,13 +105,15 @@ namespace fbs_webApi_v2.Controllers
         //from AuthRepository.
         public async Task<IActionResult> Login(UserLoginDto details)
         {
-            var responce = await _authRepository.Login(details.username, details.Password);
-            if (!responce.Success)
+            try
             {
-                return BadRequest(responce);
+                var responce = await _authRepository.Login(details.username, details.Password);
+                return Ok(responce);
             }
-
-            return Ok(responce);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -120,15 +122,18 @@ namespace fbs_webApi_v2.Controllers
         // From AuthRepository.
         public async Task<ActionResult<serviceResponce<GetUserDto>>> Register(UserRegisterDto registeruser)
         {
-
-            var responce = await _authRepository.Register(
-                new User() { User_Name = registeruser.UserName, Email = registeruser.UserName, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
-            if (responce.Success)
+            try
             {
-                return Ok(responce);
+                var responce = await _authRepository.Register(
+                    new User() { User_Name = registeruser.UserName, Email = registeruser.UserName, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
+                    return Ok(responce);
+                
             }
-
-            return BadRequest(responce);
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpPut]

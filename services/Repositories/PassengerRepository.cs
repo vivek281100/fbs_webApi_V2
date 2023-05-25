@@ -87,12 +87,17 @@ namespace fbs_webApi_v2.services.Repositories
                     _context.passengers.Remove(passenger);
                     await _context.SaveChangesAsync();
 
+                    responce.Success = true;
                     responce.Data = await _context.passengers.Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
-                    responce.Message = "User Deleted";
+                    responce.Message = "Passenger Deleted";
 
                 }
-
-
+                else
+                {
+                    responce.Success= false;
+                    responce.Message = "list empty";
+                }
+                return responce;
             }
             catch (Exception ex)
             {
@@ -106,6 +111,8 @@ namespace fbs_webApi_v2.services.Repositories
 
 
         //gets all passengers
+
+         
         #region Gets Passengers
         public async Task<serviceResponce<List<GetPassengerDto>>> GetAllPassengersAsync()
         {
@@ -126,6 +133,8 @@ namespace fbs_webApi_v2.services.Repositories
         #endregion
 
         //gets all passengers by gender
+        //done
+        //admin use
         #region passenger by gender
         public async Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByGenderAsunc(string gender)
         {
@@ -145,27 +154,28 @@ namespace fbs_webApi_v2.services.Repositories
         }
         #endregion
 
-        //gets passengers by userid
-        //pending...
-        #region passenders by user id
-        public async Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByuserIdAsync()
+        //gets passengers by bookingid
+        //done
+        #region passenders by booking id
+        public async Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByBookingIdAsync(int id)
         {
             var responce = new serviceResponce<List<GetPassengerDto>>();
-            var passengerlist = await _context.passengers.Where(p => p.Id == GetUserId()).ToListAsync();
-            if (passengerlist == null)
+            var passengerlist = await _context.passengers.Where(p => p.BookingId == id).ToListAsync();
+            if (passengerlist.Count == 0 || passengerlist == null)
             {
                 responce.Success = false;
-                responce.Message = "user not found";
+                responce.Message = "this is a draft booking , click add passengers to see here";
                 return responce;
             }
             responce.Data = _mapper.Map<List<GetPassengerDto>>(passengerlist);
-            responce.Message = "user found";
+            responce.Message = "Passengers retrived";
             return responce;
 
         }
         #endregion
 
         //updates user
+        //done
         #region Update Passenger
         public async Task<serviceResponce<GetPassengerDto>> UpdatePassengerAsync(UpdatePassengerDto passengerupdate)
         {

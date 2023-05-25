@@ -9,7 +9,7 @@ namespace fbs_webApi_v2.services.IRepositories
     {
         Task<serviceResponce<List<GetPassengerDto>>> GetAllPassengersAsync();
 
-        Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByuserIdAsync();
+        Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByBookingIdAsync(int id);
 
         Task<serviceResponce<List<GetPassengerDto>>> GetPassengersByGenderAsunc(string gender);
 

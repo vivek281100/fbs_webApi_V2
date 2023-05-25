@@ -34,7 +34,7 @@ namespace fbs_webApi_v2.DataModels
         public string Role { get; set; } = "User";
 
         [Required]
-        public bool IsActive { get; set; } = false;
+        public bool IsActive { get; set; } = true;
 
         
         //public int bookingid { get; set; }

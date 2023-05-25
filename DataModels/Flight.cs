@@ -40,10 +40,11 @@ namespace fbs_webApi_v2.DataModels
 
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DepartureDate { get; set; }
 
         [Required]
-     
+        [DataType(DataType.Date)]
         public DateTime ArrivalDate { get; set; }
 
         [Required]
@@ -54,12 +55,12 @@ namespace fbs_webApi_v2.DataModels
         public string ArrivalCity { get; set; }
 
         [Required]
-    
-        public DateTime DepartureTime { get; set; }
+        [DataType(DataType.Time)]
+        public string DepartureTime { get; set; }
 
         [Required]
-       
-        public DateTime ArrivalTime { get; set; }
+        [DataType(DataType.Time)]
+        public string ArrivalTime { get; set; }
 
         [Required]
         public decimal BasePrice { get; set; }

@@ -66,7 +66,7 @@ namespace fbs_webApi_v2.services.Repositories
 
             try
             {
-                var checkflight = await _context.Flights.FirstOrDefaultAsync(f => f.Flight_Name == addflight.Flight_Name);
+                var checkflight = await _context.Flights.FirstOrDefaultAsync(f => f.Flight_code == addflight.Flight_code);
                 if (checkflight == null)
                 {
 
