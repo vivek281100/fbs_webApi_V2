@@ -7,6 +7,7 @@ using fbs_webApi_v2.services.IRepositories;
 using fbs_webApi_v2.DTOs.FlightDtos;
 using AutoMapper;
 using fbs_webApi_v2.DTOs.UserDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace fbs_webApi_v2.services.Repositories
 {
@@ -76,7 +77,7 @@ namespace fbs_webApi_v2.services.Repositories
 
                     response.Message = "flight Added";
                     response.Data = await _context.Flights.Select(f => _mapper.Map<GetFlightDto>(f)).ToListAsync();
-                    return response;
+                     return response;
                 }
 
                 response.Success = false;
@@ -115,18 +116,28 @@ namespace fbs_webApi_v2.services.Repositories
 
         //gets all flights , used to display initial list of flights
         //for admin use.
+        
         public async Task<serviceResponce<List<GetFlightDto>>> GetAllFlightsAsync()
         {
             var responce = new serviceResponce<List<GetFlightDto>>();
-            var flights = await _context.Flights.ToListAsync();
-            if (flights != null)
+            try
             {
-                responce.Data = _mapper.Map<List<GetFlightDto>>(flights);
-                responce.Message = "flights list";
+                var flights = await _context.Flights.ToListAsync();
+                if (flights != null)
+                {
+                    responce.Data = _mapper.Map<List<GetFlightDto>>(flights);
+                    responce.Message = "flights list";
+                    return responce;
+                }
+                responce.Success = false;
+                responce.Message = "Add Flights to see here";
                 return responce;
             }
-            responce.Success = false;
-            responce.Message = "Add Flights to see here";
+            catch(Exception ex)
+            {
+                responce.Success = false;
+                responce.Message = ex.Message;
+            }
             return responce;
         }
 
@@ -159,7 +170,7 @@ namespace fbs_webApi_v2.services.Repositories
         {
             var responce = new serviceResponce<GetFlightDto>();
 
-            var checkflight = await _context.Flights.FindAsync(Updateflight.Flight_Id);
+            var checkflight = await _context.Flights.FindAsync(Updateflight.Id);
             if (checkflight != null)
             {
                 //checkflight.Flight_Name = flight.Flight_Name;

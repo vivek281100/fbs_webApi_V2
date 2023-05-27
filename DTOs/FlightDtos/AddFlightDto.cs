@@ -2,7 +2,6 @@
 {
     public class AddFlightDto
     {
-        public int FlightId { get; set; }
         public string Flight_Name { get; set; }
 
         public string Flight_code { get; set; }

@@ -20,6 +20,7 @@ namespace fbs_webApi_v2.Controllers
         }
         [HttpGet]
         [Route("getFlights")]
+        [AllowAnonymous]
         public async Task<ActionResult<serviceResponce<List<GetFlightDto>>>> getflights()
         {
             var flights = await _flightRepository.GetAllFlightsAsync();
@@ -33,7 +34,7 @@ namespace fbs_webApi_v2.Controllers
         }
 
         [HttpGet]
-        [Route("getflightsbyid/{id}")]
+        [Route("getflightsbyid")]
         public async Task<ActionResult<serviceResponce<GetFlightDto>>> getflightbyid(int id)
         {
             var flight = await _flightRepository.GetFlightByIdAsync(id);

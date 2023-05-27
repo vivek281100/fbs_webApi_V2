@@ -56,11 +56,11 @@ namespace fbs_webApi_v2.DataModels
 
         [Required]
         [DataType(DataType.Time)]
-        public string DepartureTime { get; set; }
+        public DateTime DepartureTime { get; set; }
 
         [Required]
         [DataType(DataType.Time)]
-        public string ArrivalTime { get; set; }
+        public DateTime ArrivalTime { get; set; }
 
         [Required]
         public decimal BasePrice { get; set; }

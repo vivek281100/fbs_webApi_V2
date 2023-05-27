@@ -7,7 +7,7 @@ namespace fbs_webApi_v2.DTOs.FlightDtos
     {
 
        
-        public int Flight_Id { get; set; }
+        public int Id { get; set; }
 
 
         public string Flight_Name { get; set; }
