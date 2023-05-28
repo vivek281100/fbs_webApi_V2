@@ -5,9 +5,11 @@ namespace fbs_webApi_v2.services.IRepositories
 {
     public interface IBookingRepository
     {
-        public  Task<serviceResponce<List<GetBookingDto>>> GetBookingsbyuserId();
-        public Task<serviceResponce<GetBookingDto>> AddBookingAsync(AddBookingDto addBooking);
+         Task<serviceResponce<List<GetBookingDto>>> GetBookingsbyuserId();
 
-        public Task<serviceResponce<string>> DeleteBooking(int id);
+        Task<serviceResponce<List<GetBookingDto>>> getBookingbyflightId(int id);
+         Task<serviceResponce<GetBookingDto>> AddBookingAsync(AddBookingDto addBooking);
+
+         Task<serviceResponce<string>> DeleteBooking(int id);
     }
 }

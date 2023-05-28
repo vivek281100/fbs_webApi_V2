@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using fbs_webApi_v2.Data;
 using fbs_webApi_v2.DTOs.AdminDtos;
 using Microsoft.AspNetCore.Authorization;
+using fbs_webApi_v2.DTOs.UserDtos;
 
 namespace fbs_webApi_v2.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -22,6 +23,9 @@ namespace fbs_webApi_v2.Controllers
             _adminRepository = adminRepository;
         }
 
+        #region admin actions for admin
+
+        #region get admins
         [HttpGet]
         [Route("admins")]
         public async Task<ActionResult<serviceResponce<List<GetAdminDto>>>> Getadmins()
@@ -35,7 +39,10 @@ namespace fbs_webApi_v2.Controllers
             return BadRequest("no users found 😢");
 
         }
+        #endregion
 
+
+        #region get admin by id
         [HttpGet]
         [Route("adminsbyid/{id}")]
         public async Task<ActionResult<serviceResponce<GetAdminDto>>> getadminbyid(int id)
@@ -48,7 +55,9 @@ namespace fbs_webApi_v2.Controllers
 
             return BadRequest("no user found 😢");
         }
+        #endregion
 
+        #region get admin by email
         [HttpGet]
         [Route("adminsByEmail/{email}")]
         public async Task<ActionResult<serviceResponce<GetAdminDto>>> getadminByEmail(string email)
@@ -61,6 +70,9 @@ namespace fbs_webApi_v2.Controllers
 
             return BadRequest("no user found 😢");
         }
+        #endregion
+
+        #region get admin by username
 
         [HttpGet]
         [Route("adminsByUserName/{username}")]
@@ -74,20 +86,23 @@ namespace fbs_webApi_v2.Controllers
 
             return BadRequest("no user found 😢");
         }
+        #endregion
 
-
+        #region Add Admin
         [HttpPost]
         [Route("Addadmins")]
         public async Task<ActionResult<serviceResponce<List<GetAdminDto>>>> AddAdmin(AddAdminDto admin)
         {
             if (ModelState.IsValid)
             {
-                await _adminRepository.AddAdminAsync(admin);
+               
                 return Ok("admin added");
             }
             return StatusCode(500);
         }
+        #endregion
 
+        #region (update admin)
         [HttpPut]
         [Route("Updateadmins")]
         public async Task<ActionResult<serviceResponce<GetAdminDto>>> updateUser(UpdateAdminDto updateadmin)
@@ -105,6 +120,9 @@ namespace fbs_webApi_v2.Controllers
 
             return StatusCode(500, "enter valid data");
         }
+        #endregion
+
+        #region delete admin
 
         [HttpDelete]
         [Route("Deleteadmins/{id}")]
@@ -118,5 +136,75 @@ namespace fbs_webApi_v2.Controllers
 
             return Ok("Done!");
         }
+
+        #endregion
+
+        #endregion
+
+        /// based on new design ///
+
+        #region admin actions for users
+
+
+        #region get users
+        [HttpGet]
+        [Route("GetUsers")]
+        public async Task<IActionResult> getUsers()
+        {
+            try
+            {
+                var responce = await _adminRepository.GetAllUsersAsync();
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        #endregion
+
+
+        #region update user
+        [HttpPut]
+        [Route("updateUser")]
+        public async Task<IActionResult> updateUser(updateUserDto userupdate)
+        {
+            try
+            {
+                var responce = await _adminRepository.updateUserAsync(userupdate);
+                return Ok(responce);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
+
+        #region delete user
+
+        [HttpDelete]
+        [Route("deleteUser")]
+        public async Task<IActionResult> deleteUser(int id)
+        {
+            try
+            {
+                var responce = await _adminRepository.DeleteUserAsync(id);
+                return Ok(responce);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        #endregion
+
+
+        #endregion
     }
 }

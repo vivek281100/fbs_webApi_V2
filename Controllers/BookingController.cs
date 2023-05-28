@@ -21,6 +21,10 @@ namespace fbs_webApi_v2.Controllers
             _bookingRepository = bookingRepository;
         }
 
+
+        //getbookings by userid
+        #region get booking by user id
+
         [HttpGet]
         [Route("GetBookingsbyUser")]
         public async Task<ActionResult<serviceResponce<List<GetBookingDto>>>> getbookingsByuser()
@@ -37,7 +41,30 @@ namespace fbs_webApi_v2.Controllers
             }
         }
 
+        #endregion
 
+
+        //get bookings by flight if
+        #region get flights by flight id
+        [HttpGet]
+        [Route("getbookingsbyflightId")]
+        public async Task<IActionResult> getbookingbyflightid(int id)
+        {
+            try
+            {
+                var bookings = await _bookingRepository.getBookingbyflightId(id);
+                return Ok(bookings);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
+
+        //add booking
+        #region add booking
         [HttpPost]
         [Route("AddBookingasync")]
        public async Task<ActionResult<serviceResponce<GetBookingDto>>> AddBooking([FromBody]int flightid)
@@ -57,7 +84,11 @@ namespace fbs_webApi_v2.Controllers
             }
             
         }
+        #endregion
 
+
+        //delete id
+        #region delete booking
 
         [HttpPost]
         [Route("DeleteBooking")]
@@ -73,5 +104,7 @@ namespace fbs_webApi_v2.Controllers
                 return BadRequest(ex.Message) ;
             }
         }
+
+        #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace fbs_webApi_v2.services.Authservice
         private readonly fbscontext _context;
         private readonly IConfiguration _configuration;
 
+        private static string message = string.Empty;
         public AuthRepository(fbscontext context, IConfiguration configuration)
         {
             this._context = context;
@@ -60,10 +61,10 @@ namespace fbs_webApi_v2.services.Authservice
 
             var responce = new serviceResponce<int>();
 
-            if (await UserExists(user.User_Name))
+            if (await UserExists(user))
             {
                 responce.Success = false;
-                responce.Message = "User Exists";
+                responce.Message = message;
                 return responce;
             }
 
@@ -82,10 +83,21 @@ namespace fbs_webApi_v2.services.Authservice
 
         }
 
-        public async Task<bool> UserExists(string username)
+        public async Task<bool> UserExists(User user)
         {
-            if (await _context.users.AnyAsync(u => u.User_Name.ToLower() == username.ToLower()))
+            if (await _context.users.AnyAsync(u => u.User_Name.ToLower() == user.User_Name.ToLower()))
             {
+                message = "username already exists";
+                return true;
+            }
+            if(await  _context.users.AnyAsync(U => U.Email.ToLower() == user.Email.ToLower()))
+            {
+                message = "Email already exists";
+                return true;
+            }
+            if(await _context.users.AnyAsync(u => u.PhoneNumber.ToLower() == user.PhoneNumber.ToLower()))
+            {
+                message = "phone number already exists";
                 return true;
             }
             return false;
@@ -117,8 +129,7 @@ namespace fbs_webApi_v2.services.Authservice
             List<Claim> claims = new List<Claim>()
            {
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-               new Claim(ClaimTypes.Name,user.User_Name),
-               new Claim(ClaimTypes.Email,user.Email)
+               new Claim(ClaimTypes.Name,user.User_Name)
            };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));

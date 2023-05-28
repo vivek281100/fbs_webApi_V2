@@ -9,6 +9,6 @@ namespace fbs_webApi_v2.services.Authservice
 
         Task<serviceResponce<loginresponce>> Login(string username, string password);
 
-        Task<bool> UserExists(string username);
+        Task<bool> UserExists(User user);
     }
 }

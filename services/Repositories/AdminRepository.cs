@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using fbs_webApi_v2.services.IRepositories;
 using fbs_webApi_v2.DTOs.AdminDtos;
 using AutoMapper;
+using fbs_webApi_v2.DTOs.UserDtos;
 
 namespace fbs_webApi_v2.services.Repositories
 {
@@ -20,7 +21,8 @@ namespace fbs_webApi_v2.services.Repositories
             _context = context;
             _mapper = mapper;
         }
-
+        //account actions
+        #region admin action for admin account
         public async Task<serviceResponce<List<GetAdminDto>>> AddAdminAsync(AddAdminDto newadmin)
         {
 
@@ -126,5 +128,102 @@ namespace fbs_webApi_v2.services.Repositories
             return responce;
 
         }
+
+        #endregion
+
+
+        //user crud operation
+        #region admin actions for User
+        public async Task<serviceResponce<List<GetUserWithoutPasswordDto>>> GetAllUsersAsync()
+        {
+            var responce  = new serviceResponce<List<GetUserWithoutPasswordDto>>();
+            try
+            {
+                var users = await _context.users.Where(u => u.Role.ToLower() == "user").ToListAsync();
+                if(users.Count < 0 )
+                {
+                    responce.Success = false;
+                    responce.Message = "No users Till now";
+                    
+                    return responce;
+                }
+                responce.Success = true;
+                responce.Message = "users retrived";
+                responce.Data = _mapper.Map<List<GetUserWithoutPasswordDto>>(users);
+
+                return responce;
+
+
+            }
+            catch (Exception ex)
+            {
+                responce.Success= false;
+                responce.Message = ex.Message;
+                return responce;
+            }
+
+        }
+
+        public async Task<serviceResponce<GetUserDto>> updateUserAsync(updateUserDto updateuser)
+        {
+            var responce = new serviceResponce<GetUserDto>();
+            try
+            {
+                var user = await _context.users.FindAsync(updateuser.User_Id);
+
+                if(user == null )
+                {
+                    responce.Success = false;
+                    responce.Message = "invalid user";
+                    return responce;
+                }
+
+                _mapper.Map(updateuser, user);
+                await  _context.SaveChangesAsync();
+
+                responce.Success = true;
+                responce.Message = "user updated";
+                return responce;
+            }
+            catch(Exception ex) 
+            {
+                responce.Success= false;
+                responce.Message = ex.Message;
+                return responce;
+            }
+
+        }
+
+        public async Task<serviceResponce<GetUserDto>> DeleteUserAsync(int id)
+        {
+            var responce = new serviceResponce<GetUserDto>();
+            try
+            {
+                var user = await _context.users.FindAsync(id);
+                if(user == null )
+                {
+                    responce.Success = false;
+                    responce.Message = "user not  found";
+                    return responce;
+                }
+
+                _context.users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                responce.Data = _mapper.Map<GetUserDto>(user);
+                responce.Success = true;
+                responce.Message = "user removed";
+
+                return responce;
+            }
+            catch(Exception ex)
+            {
+                responce.Success= false;
+                responce.Message = ex.Message;
+                return responce;
+            }
+
+        }
+        #endregion
     }
 }

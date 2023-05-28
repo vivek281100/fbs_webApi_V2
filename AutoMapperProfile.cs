@@ -23,6 +23,7 @@ namespace fbs_webApi_v2
 
             //User
             CreateMap<User,GetUserDto>();
+            CreateMap<User,GetUserWithoutPasswordDto>();
             CreateMap<AddUserDto, User>();
             CreateMap<updateUserDto, User>();
 

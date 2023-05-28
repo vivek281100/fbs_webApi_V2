@@ -20,7 +20,6 @@ namespace fbs_webApi_v2.DataModels
         public byte[] PasswordSalt { get; set;}
 
         [Required]
-        [DataType(DataType.EmailAddress)]
         [StringLength(120)]
         public string Email { get; set; }
 

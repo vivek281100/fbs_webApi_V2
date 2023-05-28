@@ -69,6 +69,39 @@ namespace fbs_webApi_v2.services.Repositories
         #endregion
 
 
+        //get booking by flight id
+        //admin
+        #region get bookings by flight id
+        public async Task<serviceResponce<List<GetBookingDto>>>  getBookingbyflightId(int id)
+        {
+            var responce = new serviceResponce<List<GetBookingDto>>();
+            try
+            {
+                var bookings = await _context.Bookings.Where(b => b.FlightId == id).ToListAsync();
+
+                if(bookings.Any())
+                {
+                    responce.Data = _mapper.Map<List<GetBookingDto>>(bookings);
+                    responce.Success = true;
+                    responce.Message = "bookings found";
+                    return responce;
+                }
+                else
+                {
+                    responce.Success = false;
+                    responce.Message = "no bookings found for this flight.";
+                    return responce;
+                }
+
+            }catch(Exception ex)
+            {
+                responce.Success=false;
+                responce.Message = ex.Message;
+                return responce;
+            }
+        }
+        #endregion
+
         //add booking
         //user and admin access
         #region (Add Booking)

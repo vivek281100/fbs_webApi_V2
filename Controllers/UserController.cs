@@ -125,7 +125,7 @@ namespace fbs_webApi_v2.Controllers
             try
             {
                 var responce = await _authRepository.Register(
-                    new User() { User_Name = registeruser.UserName, Email = registeruser.UserName, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
+                    new User() { User_Name = registeruser.UserName, Email = registeruser.email, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
                     return Ok(responce);
                 
             }

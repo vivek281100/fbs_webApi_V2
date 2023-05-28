@@ -59,7 +59,7 @@ namespace fbs_webApi_v2.services.Repositories
                 await _context.SaveChangesAsync();
 
                 responce.Data = await _context.passengers
-                    .Where(p => p.User.Id == GetUserId())
+                    .Where(p => p.BookingId == addpassenger.BookingId)
                 .Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
 
             }
