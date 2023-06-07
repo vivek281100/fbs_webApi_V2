@@ -7,6 +7,7 @@ using fbs_webApi_v2.services.IRepositories;
 using AutoMapper;
 using fbs_webApi_v2.DTOs.AdminDtos;
 using fbs_webApi_v2.DTOs.UserDtos;
+using System.Security.Claims;
 
 namespace fbs_webApi_v2.services.Repositories
 {
@@ -14,13 +15,24 @@ namespace fbs_webApi_v2.services.Repositories
     {
         private readonly fbscontext _context;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         //controller
-        public UserRepository(fbscontext context, IMapper mapper)
+        public UserRepository(fbscontext context, IMapper mapper,IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
+
+        #region get user id
+
+        private int getUserId()
+        {
+            var id = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
+        #endregion
 
 
         //add user
@@ -43,12 +55,45 @@ namespace fbs_webApi_v2.services.Repositories
         //}
         #endregion
 
-        //Delete User
-        public async Task<serviceResponce<List<GetUserDto>>> DeleteUserAsync(int id)
-        {
-            var user = await _context.users.FirstOrDefaultAsync(u => u.Id == id);
 
-            serviceResponce<List<GetUserDto>> responce = new serviceResponce<List<GetUserDto>>();
+
+        //get user by user id
+        public async Task<serviceResponce<GetUserDto>> GetUserByUser_IdAsync()
+        {
+            var responce = new serviceResponce<GetUserDto>();
+            try
+            {
+                var user = await  _context.users.Where(u => u.Id == getUserId()).FirstOrDefaultAsync();
+
+                if (user != null) {
+                    responce.Data = _mapper.Map<GetUserDto>(user);
+                    responce.Success = true;
+                    responce.Message = "details retrived";
+                }
+                else
+                {
+                    responce.Success = false;
+                    responce.Message = "user not found";
+                }
+
+                return responce;
+            }
+            catch (Exception ex)
+            {
+                responce.Success = false;
+                responce.Message = ex.Message;
+                return responce;
+            }
+        }
+
+
+
+        //Delete User
+        public async Task<serviceResponce<GetUserDto>> DeleteUserAsync()
+        {
+            var user = await _context.users.FirstOrDefaultAsync(u => u.Id == getUserId());
+
+            var responce = new serviceResponce<GetUserDto>();
 
             if (user == null)
             {
@@ -60,6 +105,7 @@ namespace fbs_webApi_v2.services.Repositories
             _context.users.Remove(user);
 
             await _context.SaveChangesAsync();
+            responce.Data = _mapper.Map<GetUserDto>(user);
             responce.Message = "user removed";
             return responce;
         }
@@ -112,9 +158,9 @@ namespace fbs_webApi_v2.services.Repositories
 
 
         //Update User
-        public async Task<serviceResponce<GetUserDto>> UpdateUserAsync(updateUserDto updateuser)
+        public async Task<serviceResponce<GetUserDto>> UpdateUserAsync(userupdateForUserDto updateuser)
         {
-            User userupdate = await _context.users.FindAsync(updateuser.User_Id);
+            User userupdate = await _context.users.FindAsync(getUserId());
 
             serviceResponce<GetUserDto> responce = new serviceResponce<GetUserDto>();
 

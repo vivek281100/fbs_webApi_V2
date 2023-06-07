@@ -25,6 +25,7 @@ namespace fbs_webApi_v2.services.Repositories
 
         //search flight by from and to
         //accessable by all
+        #region search Flight
         public async Task<serviceResponce<List<GetFlightDto>>> SearchFlights(SearchFlightDto searchFlight)
         {
             var responce = new serviceResponce<List<GetFlightDto>>();
@@ -55,11 +56,12 @@ namespace fbs_webApi_v2.services.Repositories
             return responce;
         }
 
-
+        #endregion
 
         //adding flight
         //allowed by admin, no user access.
-         public async Task<serviceResponce<List<GetFlightDto>>> AddFlightAsync(AddFlightDto addflight)
+        #region add Flight
+        public async Task<serviceResponce<List<GetFlightDto>>> AddFlightAsync(AddFlightDto addflight)
         {
             var response = new serviceResponce<List<GetFlightDto>>();
 
@@ -90,10 +92,11 @@ namespace fbs_webApi_v2.services.Repositories
             }
             return response;
         }
-
+        #endregion
 
         //deletes a flight
         //admin access only.
+        #region delete flight
         public async Task<serviceResponce<GetFlightDto>> DeleteFlightByIdAsync(int id)
         {
             var responce = new serviceResponce<GetFlightDto>();
@@ -112,11 +115,11 @@ namespace fbs_webApi_v2.services.Repositories
             responce.Message = "Flight bot found";
             return responce;
         }
-
+        #endregion
 
         //gets all flights , used to display initial list of flights
         //for admin use.
-        
+        #region get all flights
         public async Task<serviceResponce<List<GetFlightDto>>> GetAllFlightsAsync()
         {
             var responce = new serviceResponce<List<GetFlightDto>>();
@@ -140,12 +143,14 @@ namespace fbs_webApi_v2.services.Repositories
             }
             return responce;
         }
-
+        #endregion
 
         //get flight by flight id;
         //to search.
         //admin use
         //need to add error handling.
+        #region get flight by id
+
         public async Task<serviceResponce<GetFlightDto>> GetFlightByIdAsync(int id)
         {
             var responce = new serviceResponce<GetFlightDto>();
@@ -162,10 +167,13 @@ namespace fbs_webApi_v2.services.Repositories
             return responce;
         }
 
+        #endregion
+
 
         //for admin , no user access.
         //updates the flight.
         //need to add error handling.
+        #region update flight
         public async Task<serviceResponce<GetFlightDto>> UpdateFlightAsync(UpdateFlightDto Updateflight)
         {
             var responce = new serviceResponce<GetFlightDto>();
@@ -198,5 +206,7 @@ namespace fbs_webApi_v2.services.Repositories
             responce.Message = "Flight no found";
             return responce;
         }
+        #endregion
     }
+
 }

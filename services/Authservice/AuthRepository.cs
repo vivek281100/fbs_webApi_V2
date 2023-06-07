@@ -1,11 +1,10 @@
 ﻿using fbs_webApi_v2.Data;
 using fbs_webApi_v2.DataModels;
+using fbs_webApi_v2.DTOs.UserDtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace fbs_webApi_v2.services.Authservice
 {
@@ -13,19 +12,29 @@ namespace fbs_webApi_v2.services.Authservice
     {
         private readonly fbscontext _context;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         private static string message = string.Empty;
-        public AuthRepository(fbscontext context, IConfiguration configuration)
+        public AuthRepository(fbscontext context, IConfiguration configuration, IHttpContextAccessor contextAccessor)
         {
             this._context = context;
             this._configuration = configuration;
+            this._contextAccessor = contextAccessor;
+        }
+
+        //get user Id
+        private int GetUserId()
+        {
+            var id = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
 
         //login
+        #region Login
         public async Task<serviceResponce<loginresponce>> Login(string username, string password)
         {
             var responce = new serviceResponce<loginresponce>();
-            var user = await _context.users.FirstOrDefaultAsync(u => u.User_Name.ToLower() == username.ToLower());
+            var user = await _context.users.FirstOrDefaultAsync(u => u.UserName.ToLower() == username.ToLower());
             if (user == null)
             {
                 responce.Success = false;
@@ -56,6 +65,11 @@ namespace fbs_webApi_v2.services.Authservice
             return responce;
         }
 
+        #endregion
+
+
+        //register
+        #region register
         public async Task<serviceResponce<int>> Register(User user, string password)
         {
 
@@ -83,9 +97,43 @@ namespace fbs_webApi_v2.services.Authservice
 
         }
 
+        #endregion
+
+
+        //Change Password
+       public async Task<serviceResponce<string>> changepassword(changepasswordDto passwordform)
+        {
+            var responce =new serviceResponce<string>();
+            var user = await _context.users.Where(u => u.Id == GetUserId()).FirstOrDefaultAsync();
+
+            if(user == null)
+            {
+                responce.Success = false;
+                responce.Message = "try again";
+                responce.Data = "user not found";
+                return responce;
+            }
+
+
+
+            CreatePasswordHash(passwordform.password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordHash = passwordHash;
+
+            user.PasswordSalt = passwordSalt;
+
+            await _context.SaveChangesAsync();
+
+            responce.Success = true;
+            responce.Message = "password updated!";
+            responce.Data = passwordform.password;
+            return responce;
+        }
+
+        #region User Exits
         public async Task<bool> UserExists(User user)
         {
-            if (await _context.users.AnyAsync(u => u.User_Name.ToLower() == user.User_Name.ToLower()))
+            if (await _context.users.AnyAsync(u => u.UserName.ToLower() == user.UserName.ToLower()))
             {
                 message = "username already exists";
                 return true;
@@ -103,7 +151,10 @@ namespace fbs_webApi_v2.services.Authservice
             return false;
         }
 
+        #endregion
 
+
+        #region Change Password
         private void CreatePasswordHash(string password, out byte[] PasswordHash, out byte[] PasswordSalt)
         {
             using (var hmca = new System.Security.Cryptography.HMACSHA512())
@@ -112,7 +163,9 @@ namespace fbs_webApi_v2.services.Authservice
                 PasswordHash = hmca.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
+        #endregion
 
+        #region Verify Password
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -122,14 +175,16 @@ namespace fbs_webApi_v2.services.Authservice
                 return newHash.SequenceEqual(passwordHash);
             }
         }
+        #endregion
 
 
+        #region Cerate token
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>()
            {
                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-               new Claim(ClaimTypes.Name,user.User_Name)
+               new Claim(ClaimTypes.Name,user.UserName)
            };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -150,6 +205,11 @@ namespace fbs_webApi_v2.services.Authservice
 
         }
     }
+    #endregion
+
+
+
+
 
 
     //class for login responce

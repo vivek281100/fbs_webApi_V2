@@ -11,7 +11,7 @@ namespace fbs_webApi_v2.services.IRepositories
         //Task<serviceResponce<List<GetUserDto>>> GetUsersAsync();
 
         //Task<serviceResponce<GetUserDto>> Register(AddUserDto addUserDto);
-        //Task<serviceResponce<GetUserDto>> GetUserByUser_IdAsync(int userId);
+        Task<serviceResponce<GetUserDto>> GetUserByUser_IdAsync();
 
         //Task<serviceResponce<GetUserDto>> GetUserByUserNameAsync(string name);
 
@@ -22,9 +22,9 @@ namespace fbs_webApi_v2.services.IRepositories
         //Task<serviceResponce<List<GetUserDto>>> AddUserAsync(AddUserDto adduser);
         //Task<serviceResponce<GetUserDto>> Login(string username, string password);
 
-        Task<serviceResponce<GetUserDto>> UpdateUserAsync(updateUserDto updateuser);
+        Task<serviceResponce<GetUserDto>> UpdateUserAsync(userupdateForUserDto updateuser);
 
-        Task<serviceResponce<List<GetUserDto>>> DeleteUserAsync(int userId);
+        Task<serviceResponce<GetUserDto>> DeleteUserAsync();
 
     }
 }

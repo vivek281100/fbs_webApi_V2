@@ -84,9 +84,9 @@ namespace fbs_webApi_v2.Controllers
         }
 
 
-        [HttpPost]
+        [HttpDelete]
         [Route("RemovePassenger")]
-        public async Task<ActionResult<serviceResponce<GetPassengerDto>>> deletePassenger([FromBody]int id)
+        public async Task<ActionResult<serviceResponce<GetPassengerDto>>> deletePassenger(int id)
         {
             try
             {

@@ -99,6 +99,26 @@ namespace fbs_webApi_v2.Controllers
         //}
         #endregion
 
+        #region Get user
+        [HttpGet]
+        [Route("getUser")]
+        public async Task<IActionResult> getUser()
+        {
+            try
+            {
+                var responce = await _userRepository.GetUserByUser_IdAsync();
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
+
+
+        #region User Login
         [HttpPost]
         [Route("UserLogin")]
         [AllowAnonymous]
@@ -115,7 +135,10 @@ namespace fbs_webApi_v2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
+
+        #region user Register
         [HttpPost]
         [Route("registeruser")]
         [AllowAnonymous]
@@ -125,7 +148,7 @@ namespace fbs_webApi_v2.Controllers
             try
             {
                 var responce = await _authRepository.Register(
-                    new User() { User_Name = registeruser.UserName, Email = registeruser.email, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
+                    new User() { UserName = registeruser.UserName, Email = registeruser.email, PhoneNumber = registeruser.phonenumber }, registeruser.Password);
                     return Ok(responce);
                 
             }
@@ -136,14 +159,19 @@ namespace fbs_webApi_v2.Controllers
             
         }
 
+        #endregion
+
+
+        #region User Update
+
         [HttpPut]
         [Route("Updateusers")]
-        public async Task<ActionResult> updateUser(updateUserDto updateuser)
+        public async Task<ActionResult> updateUser(userupdateForUserDto updateuser)
         {
             if (ModelState.IsValid)
             {
                 var userupdate = await _userRepository.UpdateUserAsync(updateuser);
-                if (!userupdate.Success)
+                if (userupdate.Success == false)
                 {
                     return BadRequest(userupdate);
                 };
@@ -153,12 +181,34 @@ namespace fbs_webApi_v2.Controllers
 
             return StatusCode(500, "user details not valid");
         }
+        #endregion
 
+
+        //change password
+        #region Change password
+
+        [HttpPut]
+        [Route("UpdatePassword")]
+        public async Task<IActionResult> UpdatePassword(changepasswordDto passwordform)
+        {
+            try
+            {
+                var responce = await _authRepository.changepassword(passwordform);
+                return Ok(responce);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
+        #region delete user
         [HttpDelete]
         [Route("Deleteusers/{id}")]
-        public async Task<IActionResult> deleteUser(int id)
+        public async Task<IActionResult> deleteUser()
         {
-            var checkdelete = await _userRepository.DeleteUserAsync(id);
+            var checkdelete = await _userRepository.DeleteUserAsync();
             if (!checkdelete.Success)
             {
                 return BadRequest(checkdelete);
@@ -166,5 +216,6 @@ namespace fbs_webApi_v2.Controllers
 
             return Ok(checkdelete);
         }
+        #endregion
     }
 }

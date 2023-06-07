@@ -60,6 +60,7 @@ namespace fbs_webApi_v2.services.Repositories
 
                 responce.Data = await _context.passengers
                     .Where(p => p.BookingId == addpassenger.BookingId)
+
                 .Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
 
             }

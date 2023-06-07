@@ -12,7 +12,7 @@ namespace fbs_webApi_v2.DataModels
 
         [Required]
         [StringLength(50)]
-        public string User_Name { get; set; }
+        public string UserName { get; set; }
 
 
         public byte[] PasswordHash { get; set; }
