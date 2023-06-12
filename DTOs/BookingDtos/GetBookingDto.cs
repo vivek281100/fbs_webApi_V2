@@ -1,4 +1,6 @@
-﻿namespace fbs_webApi_v2.DTOs.BookingDtos
+﻿using fbs_webApi_v2.DataModels;
+
+namespace fbs_webApi_v2.DTOs.BookingDtos
 {
     public class GetBookingDto
     {
@@ -9,5 +11,7 @@
         public DateTime bookingdatetime { get; set; } 
 
         public int FlightId { get; set; }
+
+        //public Payment? payment { get; set; }
     }
 }

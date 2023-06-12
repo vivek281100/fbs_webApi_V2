@@ -36,6 +36,9 @@ namespace fbs_webApi_v2.DataModels
         [StringLength(13)]
         public string PhoneNumber { get; set; }
 
+        [Required]
+        public string AllocatedSeat { get; set; }
+
 
         //flight relation
         //[ForeignKey("Flight")]

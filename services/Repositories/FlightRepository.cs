@@ -207,6 +207,11 @@ namespace fbs_webApi_v2.services.Repositories
             return responce;
         }
         #endregion
+    
+        //for user,
+        //gets flight details by booking id.
+
+    
     }
 
 }

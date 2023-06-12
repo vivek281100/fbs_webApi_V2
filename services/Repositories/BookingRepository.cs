@@ -33,7 +33,7 @@ namespace fbs_webApi_v2.services.Repositories
         }
         #endregion
 
-
+        //get booking by user id
         #region(get bookings by userid)
 
         public async Task<serviceResponce<List<GetBookingDto>>> GetBookingsbyuserId()
@@ -68,6 +68,38 @@ namespace fbs_webApi_v2.services.Repositories
         }
         #endregion
 
+        //update booking status
+        public async Task<serviceResponce<string>> UpdateBookingStatusByid(int id)
+        {
+            var responce = new serviceResponce<string>();
+            try
+            {
+                var booking = await _context.Bookings.FindAsync(id);
+                if(booking == null)
+                {
+                    booking.status = true;
+                    await _context.SaveChangesAsync();
+
+                    responce.Data = "status updated";
+                    responce.Success = true;
+                    responce.Message = "Success";
+                    return responce;
+                }
+                else
+                {
+                    responce.Data = "status update failed";
+                    responce.Success = false;
+                    responce.Message = "inComplete booking";
+                    return responce;
+                }
+            }
+            catch (Exception ex)
+            {
+                responce.Success=false;
+                responce.Message = ex.Message;
+                return responce;
+            }
+        }
 
         //get booking by flight id
         //admin

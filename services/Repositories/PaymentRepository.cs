@@ -4,27 +4,52 @@ using fbs_webApi_v2.Data;
 using fbs_webApi_v2.DataModels;
 using Microsoft.EntityFrameworkCore;
 using fbs_webApi_v2.services.IRepositories;
+using fbs_webApi_v2.DTOs.paymentDtos;
+using AutoMapper;
 
 namespace fbs_webApi_v2.services.Repositories
 {
     public class PaymentRepository : IPaymentRepository
     {
         private readonly fbscontext _context;
-        public PaymentRepository(fbscontext context)
+        private readonly IMapper _mapper;
+        public PaymentRepository(fbscontext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<bool> AddPaymentAsync(Payment payment)
+        public async Task<serviceResponce<GetPaymentDto>> AddPaymentAsync(AddPaymentDto payment)
         {
-            var checkpayment = await _context.payments.FindAsync(payment.Id);
-            if (checkpayment == null)
+            var responce = new serviceResponce<GetPaymentDto>();
+            try
             {
-                await _context.payments.AddAsync(payment);
-                await _context.SaveChangesAsync();
-                return true;
+                var checkpayment = await _context.payments.Where(p => p.bookingid == payment.bookingid).FirstOrDefaultAsync();
+                if (checkpayment == null)
+                {
+                    var addpayment = _mapper.Map<Payment>(payment);
+                    await _context.payments.AddAsync(addpayment);
+                    await _context.SaveChangesAsync();
 
+                    responce.Success = true;
+                    responce.Data = _mapper.Map<GetPaymentDto>(addpayment);
+                    responce.Message = "Payment Done";
+                    return responce;
+
+                }
+                else
+                {
+                    responce.Success = false;
+                    responce.Data = null;
+                    responce.Message = "Payment Failed";
+                    return responce;
+                }
             }
-            return false;
+            catch (Exception ex)
+            {
+                responce.Success = false;
+                responce.Message = ex.Message;
+                return responce;
+            }
         }
 
         public async Task<bool> DeletePaymentAsync(int id)
@@ -37,9 +62,9 @@ namespace fbs_webApi_v2.services.Repositories
             return true;
         }
 
-        public async Task<Payment> GetPaymentByIdAsync(int id)
+        public async Task<Payment> GetPaymentByBookingIdAsync(int id)
         {
-            var payment = await _context.payments.FindAsync(id);
+            var payment = await _context.payments.Where(p => p.bookingid == id).FirstOrDefaultAsync();
             return payment;
         }
 

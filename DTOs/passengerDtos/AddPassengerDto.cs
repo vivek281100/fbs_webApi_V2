@@ -16,6 +16,8 @@
 
         public string PhoneNumber { get; set; }
 
+        public string AllocatedSeat { get; set; }
+
         public int BookingId { get; set; }
     }
 }

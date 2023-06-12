@@ -17,5 +17,8 @@ namespace fbs_webApi_v2.services.IRepositories
 
         Task<serviceResponce<GetFlightDto>> UpdateFlightAsync(UpdateFlightDto updateflight);
         Task<serviceResponce<GetFlightDto>> DeleteFlightByIdAsync(int id);
+
+        //new 
+     //   Task<serviceResponce<GetFlightDto>> getflightdetailsbybookingId(int id);
     }
 }

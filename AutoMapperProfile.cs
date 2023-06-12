@@ -8,6 +8,7 @@ using fbs_webApi_v2.DTOs.AdminDtos;
 using fbs_webApi_v2.DTOs.BookingDtos;
 using fbs_webApi_v2.DTOs.FlightDtos;
 using fbs_webApi_v2.DTOs.passengerDtos;
+using fbs_webApi_v2.DTOs.paymentDtos;
 using fbs_webApi_v2.DTOs.UserDtos;
 
 namespace fbs_webApi_v2
@@ -43,6 +44,11 @@ namespace fbs_webApi_v2
             CreateMap<Booking, GetBookingDto>();
             CreateMap<AddBookingDto, Booking>();
             CreateMap<UpdateBookingDto, Booking>();
+
+            //Payment
+            CreateMap<Payment, GetPaymentDto>();
+            CreateMap<AddPaymentDto, Payment>();
+            CreateMap<updatePaymentDto,Payment>();
         }
     }
 }

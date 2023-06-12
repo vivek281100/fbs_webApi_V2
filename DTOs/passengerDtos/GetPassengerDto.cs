@@ -18,5 +18,7 @@ namespace fbs_webApi_v2.DTOs.passengerDtos
 
 
         public string PhoneNumber { get; set; }
+
+        public string AllocatedSeat { get; set; }
     }
 }

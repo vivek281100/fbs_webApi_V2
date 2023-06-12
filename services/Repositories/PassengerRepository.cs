@@ -83,13 +83,15 @@ namespace fbs_webApi_v2.services.Repositories
             {
 
                 Passenger passenger = await _context.passengers.FirstOrDefaultAsync(p => p.Id == id);
+                var bookingid = passenger.BookingId;
                 if (passenger != null)
                 {
                     _context.passengers.Remove(passenger);
                     await _context.SaveChangesAsync();
 
                     responce.Success = true;
-                    responce.Data = await _context.passengers.Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
+                    var passengers = await _context.passengers.Where(p => p.BookingId == bookingid).ToListAsync();
+                    responce.Data = passengers.Select(p => _mapper.Map<GetPassengerDto>(p)).ToList();
                     responce.Message = "Passenger Deleted";
 
                 }

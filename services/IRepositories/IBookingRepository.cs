@@ -10,6 +10,8 @@ namespace fbs_webApi_v2.services.IRepositories
         Task<serviceResponce<List<GetBookingDto>>> getBookingbyflightId(int id);
          Task<serviceResponce<GetBookingDto>> AddBookingAsync(AddBookingDto addBooking);
 
+        Task<serviceResponce<string>> UpdateBookingStatusByid(int id);
+
          Task<serviceResponce<string>> DeleteBooking(int id);
     }
 }

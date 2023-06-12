@@ -163,6 +163,10 @@ namespace fbs_webApi_v2.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
+                    b.Property<string>("AllocatedSeat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 

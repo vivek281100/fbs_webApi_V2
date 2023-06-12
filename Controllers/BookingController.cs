@@ -44,6 +44,8 @@ namespace fbs_webApi_v2.Controllers
         #endregion
 
 
+
+
         //get bookings by flight if
         #region get flights by flight id
         [HttpGet]
@@ -87,12 +89,31 @@ namespace fbs_webApi_v2.Controllers
         #endregion
 
 
+        //update booking status
+        #region update booking status
+
+        [HttpPut]
+        [Route("updateBookingStatus")]
+        public async Task<IActionResult> updatebookingstatus(int id)
+        {
+            try
+            {
+                var responce = _bookingRepository.UpdateBookingStatusByid(id);
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
         //delete id
         #region delete booking
 
-        [HttpPost]
+        [HttpDelete]
         [Route("DeleteBooking")]
-        public async Task<ActionResult<serviceResponce<string>>> deleteBooking([FromBody]int id)
+        public async Task<ActionResult<serviceResponce<string>>> deleteBooking(int id)
         {
             try
             {
