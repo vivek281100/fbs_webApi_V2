@@ -94,11 +94,11 @@ namespace fbs_webApi_v2.Controllers
 
         [HttpPut]
         [Route("updateBookingStatus")]
-        public async Task<IActionResult> updatebookingstatus(int id)
+        public async Task<IActionResult> updatebookingstatus([FromBody]int id)
         {
             try
             {
-                var responce = _bookingRepository.UpdateBookingStatusByid(id);
+                var responce = await _bookingRepository.UpdateBookingStatusByid(id);
                 return Ok(responce);
             }
             catch (Exception ex)

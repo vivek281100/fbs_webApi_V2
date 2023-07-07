@@ -9,7 +9,7 @@ namespace fbs_webApi_v2.services.IRepositories
     {
         Task<List<Payment>> GetPaymentsAsync();
 
-        Task<Payment> GetPaymentByBookingIdAsync(int id);
+        Task<serviceResponce<GetPaymentDto>> GetPaymentByBookingIdAsync(int id);
 
         Task<List<Payment>> GetPaymentsByPayment_ModeAsync(string mode);
 

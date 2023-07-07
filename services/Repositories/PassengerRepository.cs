@@ -54,14 +54,33 @@ namespace fbs_webApi_v2.services.Repositories
 
             try
             {
-                _context.passengers.Add(passenger);
+                var checkpassenger = await _context.passengers.Where(p => p.FirstName == passenger.FirstName && p.BookingId == passenger.BookingId).FirstOrDefaultAsync();
+                var checkpassengerseat = await _context.passengers.Where(p => p.AllocatedSeat == passenger.AllocatedSeat && p.BookingId == passenger.BookingId).FirstOrDefaultAsync();
+                if (checkpassenger == null)
+                {
 
-                await _context.SaveChangesAsync();
+                    if (checkpassengerseat == null)
+                    {
+                        _context.passengers.Add(passenger);
 
-                responce.Data = await _context.passengers
-                    .Where(p => p.BookingId == addpassenger.BookingId)
+                        await _context.SaveChangesAsync();
 
-                .Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
+                        responce.Data = await _context.passengers
+                            .Where(p => p.BookingId == addpassenger.BookingId)
+
+                        .Select(p => _mapper.Map<GetPassengerDto>(p)).ToListAsync();
+                    }
+                    else
+                    {
+                        responce.Success = false;
+                        responce.Message = "Seat Already Selected";
+                    }
+                }
+                else
+                {
+                    responce.Message = "passenger already exists";
+                    responce.Success = false;
+                }
 
             }
             catch (Exception ex)

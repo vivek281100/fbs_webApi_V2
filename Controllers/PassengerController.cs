@@ -58,14 +58,17 @@ namespace fbs_webApi_v2.Controllers
         public async Task<ActionResult<serviceResponce<List<GetPassengerDto>>>> AddPassengerForUser(AddPassengerDto addpassenger)
         {
             //int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var responce = await _passengerRepository.AddPassengerAsync(addpassenger);
-
-            if (responce.Success)
+            try
             {
+                var responce = await _passengerRepository.AddPassengerAsync(addpassenger);
                 return Ok(responce);
+
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            return BadRequest(responce);
+           
         }
 
 

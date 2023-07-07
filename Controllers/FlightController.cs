@@ -18,6 +18,8 @@ namespace fbs_webApi_v2.Controllers
         {
             _flightRepository = flightRepository;
         }
+
+
         [HttpGet]
         [Route("getFlights")]
         [AllowAnonymous]
@@ -45,6 +47,22 @@ namespace fbs_webApi_v2.Controllers
             return BadRequest(flight);
         }
 
+
+        [HttpGet]
+        [Route("getFlightByBookingid")]
+        public async Task<IActionResult> getFlightbuBookingid(int id)
+        {
+            try
+            {
+                var responce = await _flightRepository.getflightdetailsbybookingId(id);
+                return Ok(responce);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
 
         [HttpPost]
@@ -102,5 +120,24 @@ namespace fbs_webApi_v2.Controllers
 
             return BadRequest(responce);
         }
+
+
+        [HttpGet]
+        [Route("occuipedSeats")]
+        public async Task<IActionResult> getOccupiedflightseats(int id)
+        {
+            try
+            {
+                var responce = await _flightRepository.getOccupiedflightseats(id);
+                return Ok(responce);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+
     }
 }

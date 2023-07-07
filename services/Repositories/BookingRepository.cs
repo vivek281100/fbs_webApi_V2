@@ -42,7 +42,7 @@ namespace fbs_webApi_v2.services.Repositories
 
             try
             {
-                var bookings = await _context.Bookings.Where(b => b.UserId == GetUserId()).ToListAsync();
+                var bookings = await _context.Bookings.Include(f => f.Flight).Include(p => p.Passenger).Where(b => b.UserId == GetUserId()).ToListAsync();
 
                 if (bookings.Any())
                 {
@@ -75,9 +75,10 @@ namespace fbs_webApi_v2.services.Repositories
             try
             {
                 var booking = await _context.Bookings.FindAsync(id);
-                if(booking == null)
+                if(booking != null)
                 {
                     booking.status = true;
+
                     await _context.SaveChangesAsync();
 
                     responce.Data = "status updated";

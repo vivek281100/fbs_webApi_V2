@@ -62,10 +62,33 @@ namespace fbs_webApi_v2.services.Repositories
             return true;
         }
 
-        public async Task<Payment> GetPaymentByBookingIdAsync(int id)
+        public async Task<serviceResponce<GetPaymentDto>> GetPaymentByBookingIdAsync(int id)
         {
-            var payment = await _context.payments.Where(p => p.bookingid == id).FirstOrDefaultAsync();
-            return payment;
+            var responce = new serviceResponce<GetPaymentDto>();
+            try
+            {
+                var payment = await _context.payments.Where(p => p.bookingid == id).FirstOrDefaultAsync();
+                if (payment != null)
+                {
+                    responce.Data = _mapper.Map<GetPaymentDto>(payment);
+                    responce.Success = true;
+                    responce.Message = "retreved";
+                    return responce;
+                }
+                else
+                {
+                    responce.Success = false;
+                    responce.Message = " Payment pending for this booking";
+                    return responce;
+                }
+            }
+            catch (Exception ex)
+            {
+                responce.Success = false;
+                responce.Data = null;   
+                responce.Message = ex.Message;
+                return responce;
+            }
         }
 
         public async Task<List<Payment>> GetPaymentsAsync()
